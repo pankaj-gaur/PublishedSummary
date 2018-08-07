@@ -35,13 +35,14 @@
             return a promise.
             </remarks>
         </member>
-        <member name="F:Alchemy4Tridion.Plugins.AlchemyApiController.client">
+        <member name="F:Alchemy4Tridion.Plugins.AlchemyApiController._client">
             <summary>
             The session aware core service client.
             </summary>
         </member>
         <member name="P:Alchemy4Tridion.Plugins.AlchemyApiController.Client">
             <summary>
+            Deprecated - use .Clients instead.
             Gets or sets the session aware core service client. Will automatically create one impersonating the currently
             logged in user using the default end point (netTcp_2013) if not previously set. This client is dispose safe (and will automatically be
             disposed of by the ApiController at the end of the request if not already done so, so calling Client.Dispose() is not required).
@@ -50,6 +51,11 @@
             This property is lazily loaded so no core service client is created if the property is never called. Also note that this property
             is used by the IUserService property.
             </remarks>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.AlchemyApiController.Clients">
+            <summary>
+            Gets a helper to client service contracts.
+            </summary>
         </member>
         <member name="P:Alchemy4Tridion.Plugins.AlchemyApiController.Plugin">
             <summary>
@@ -226,6 +232,399 @@
         <member name="M:Alchemy4Tridion.Plugins.AlchemyPluginBase.LoadInfo">
             <summary>
             Loads the a4t.xml file and sets the info properties.
+            </summary>
+        </member>
+        <member name="T:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603">
+            <summary>
+            Provides a wrapper of the Tridion SessionAwareCoreServiceClient using a safe implementation of IDisposable.
+            You can use this client inside of a using statement, and calling its Close or Dispose method will safely
+            close out the 
+            </summary>
+            <remarks>
+            Shoutout to Eric Huiza (http://erichuiza.blogspot.com/2013/12/how-to-correctly-dispose-coreservice.html)
+            </remarks>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.ClientEndpoint">
+            <summary>
+            Gets which entpoint was used to create this core service client.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.ImpersonatedUsername">
+            <summary>
+            Gets the name of the user that the client was last impersonated with using the Impersonate method.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.Channel">
+            <summary>
+            Gets or sets the underlying core service client channel.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.#ctor">
+            <summary>
+            Creates a new SessionAwareCoreServiceClient using the supplied endpoint.
+            </summary>
+            <param name="endPoint"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.Close">
+            <summary>
+            Calls the dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201603.Finalize">
+            <summary>
+            Finalizer
+            </summary>
+        </member>
+        <member name="T:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501">
+            <summary>
+            Provides a wrapper of the Tridion SessionAwareCoreServiceClient using a safe implementation of IDisposable.
+            You can use this client inside of a using statement, and calling its Close or Dispose method will safely
+            close out the 
+            </summary>
+            <remarks>
+            Shoutout to Eric Huiza (http://erichuiza.blogspot.com/2013/12/how-to-correctly-dispose-coreservice.html)
+            </remarks>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.ClientEndpoint">
+            <summary>
+            Gets which entpoint was used to create this core service client.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.ImpersonatedUsername">
+            <summary>
+            Gets the name of the user that the client was last impersonated with using the Impersonate method.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.Channel">
+            <summary>
+            Gets or sets the underlying core service client channel.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.#ctor">
+            <summary>
+            Creates a new SessionAwareCoreServiceClient using the supplied endpoint.
+            </summary>
+            <param name="endPoint"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.Close">
+            <summary>
+            Calls the dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.Impersonate(System.String)">
+            <summary>
+            Impersonates the client as the given account username. Sets the ImpersonatedUsername as a reference
+            to the last username that was impersonated.
+            </summary>
+            <param name="username">The account username.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient201501.Finalize">
+            <summary>
+            Finalizer
+            </summary>
+        </member>
+        <member name="T:Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint">
+            <summary>
+            Represents possible end points for a core service client.
+            </summary>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint.NetTcp201501">
+            SDL Web 8 end point
+        </member>
+        <member name="T:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient">
+            <summary>
+            Provides a wrapper of the Tridion SessionAwareCoreServiceClient using a safe implementation of IDisposable.
+            You can use this client inside of a using statement, and calling its Close or Dispose method will safely
+            close out the 
+            </summary>
+            <remarks>
+            Shoutout to Eric Huiza (http://erichuiza.blogspot.com/2013/12/how-to-correctly-dispose-coreservice.html)
+            </remarks>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.ClientEndpoint">
+            <summary>
+            Gets which entpoint was used to create this core service client.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.ImpersonatedUsername">
+            <summary>
+            Gets the name of the user that the client was last impersonated with using the Impersonate method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.#ctor">
+            <summary>
+            Creates a new SessionAwareCoreServiceClient using a default endpoint config name of netTcp_2013
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.#ctor(Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint)">
+            <summary>
+            Creates a new SessionAwareCoreServiceClient using the supplied endpoint.
+            </summary>
+            <param name="endPoint"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.#ctor(System.String)">
+            <summary>
+            Creates a new SessionAwareCoreServiceClient using the supplied end point configuration name (ie "netTcp_2013").
+            </summary>
+            <param name="endPointConfigurationName"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.GetEndpointConfigurationName(Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint)">
+            <summary>
+            Gets the endpoint configuration name, defaulting to "netTcp_2013".
+            </summary>
+            <param name="endPoint"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Close">
+            <summary>
+            Hides the underlying client and calls the Dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Impersonate(System.String)">
+            <summary>
+            Impersonates the client as the given account username. Sets the ImpersonatedUsername as a reference
+            to the last username that was impersonated.
+            </summary>
+            <param name="username">The account username.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Finalize">
+            <summary>
+            Finalizer
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyClients.CoreServiceEndPoint">
+            <summary>
+            The default session aware core service endpoint to use.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyClients.SessionAwareCoreServiceClient">
+            <summary>
+            Gets a session aware core service client that can be used for scope duration.  Uses the CoreServiceEndPoint to open.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyClients.GetContentManagerVersion">
+            <summary>
+            Get the Content Manager version in an enum.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201501.isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201501.Channel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201501.Close">
+            <summary>
+            Calls the dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201501.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201501.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201501._isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201501.ClientEndpoint">
+            <summary>
+            Gets which entpoint was used to create this core service client.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201501.Close">
+            <summary>
+            Calls the dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201501.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201501.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201603._isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201603.Channel">
+            <summary>
+            CoreService Channel
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201603.Close">
+            <summary>
+            Calls the dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201603.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamDownloadClient201603.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201603._isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201603.ClientEndpoint">
+            <summary>
+            Gets which entpoint was used to create this core service client.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201603.Close">
+            <summary>
+            Calls the dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201603.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.CoreService.AlchemyStreamUploadClient201603.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="T:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013">
+            <summary>
+            Provides a wrapper of the Tridion SessionAwareCoreServiceClient using a safe implementation of IDisposable.
+            You can use this client inside of a using statement, and calling its Close or Dispose method will safely
+            close out the 
+            </summary>
+            <remarks>
+            Shoutout to Eric Huiza (http://erichuiza.blogspot.com/2013/12/how-to-correctly-dispose-coreservice.html)
+            </remarks>
+        </member>
+        <member name="F:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013._isDisposed">
+            <summary>
+            Whether or not the dispose method has already been called.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.ClientEndpoint">
+            <summary>
+            Gets which entpoint was used to create this core service client.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.ImpersonatedUsername">
+            <summary>
+            Gets the name of the user that the client was last impersonated with using the Impersonate method.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.Channel">
+            <summary>
+            Gets or sets the underlying core service client channel.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.#ctor">
+            <summary>
+            Creates a new SessionAwareCoreServiceClient using the supplied endpoint.
+            </summary>
+            <param name="endPoint"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.Close">
+            <summary>
+            Calls the dispose method.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.Dispose">
+            <summary>
+            Implements IDisposable and disposes of the WCF client in a safe manner.
+            </summary>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.Dispose(System.Boolean)">
+            <summary>
+            Disposes the client in a safe manner.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.Impersonate(System.String)">
+            <summary>
+            Impersonates the client as the given account username. Sets the ImpersonatedUsername as a reference
+            to the last username that was impersonated.
+            </summary>
+            <param name="username">The account username.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemyCoreServiceClient2013.Finalize">
+            <summary>
+            Finalizer
             </summary>
         </member>
         <member name="T:Alchemy4Tridion.Plugins.Controllers.IWindowsImpersonator">
@@ -1458,6 +1857,21 @@
             Gets the unique identifier of this plugin used in the web store.
             </summary>
         </member>
+        <member name="P:Alchemy4Tridion.Plugins.Info.IPluginInfo.InstalledAt">
+            <summary>
+            Gets the time that the plugin was installed.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Info.IPluginInfo.InstalledBy">
+            <summary>
+            Gets the username of the user who installed the plugin.
+            </summary>
+        </member>
+        <member name="P:Alchemy4Tridion.Plugins.Info.IPluginInfo.InstalledFrom">
+            <summary>
+            Gets the method of installation (webstore, package upload).
+            </summary>
+        </member>
         <member name="P:Alchemy4Tridion.Plugins.Info.IPluginInfo.Name">
             <summary>
             Gets the unique plugin's name.
@@ -2188,9 +2602,15 @@
             <param name="message">The message to log.</param>
             <param name="args">Zero or more arguments to pass to the log message's format string.</param>
         </member>
+        <member name="M:Alchemy4Tridion.Plugins.Logging.ILogger.Info(System.String)">
+            <summary>
+            Logs a message at the info level.
+            </summary>
+            <param name="message">The message to log.</param>
+        </member>
         <member name="M:Alchemy4Tridion.Plugins.Logging.ILogger.Warn(System.String,System.Object[])">
             <summary>
-            Logs a message at the debug level.
+            Logs a message at the warning level.
             </summary>
             <param name="message">The message to log.</param>
             <param name="args">Zero or more arguments to pass to the log message's format string.</param>
@@ -2200,6 +2620,19 @@
             Logs an exception at the warning level.
             </summary>
             <param name="ex"></param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Logging.ILogger.Audit(System.String,System.Object[])">
+            <summary>
+            Logs a message at the audit level.
+            </summary>
+            <param name="message">The message to log.</param>
+            <param name="args">Zero or more arguments to pass to the log message's format string.</param>
+        </member>
+        <member name="M:Alchemy4Tridion.Plugins.Logging.ILogger.Audit(System.String)">
+            <summary>
+            Logs an exception at the audit level.
+            </summary>
+            <param name="message">The message to log.</param>
         </member>
         <member name="T:Alchemy4Tridion.Plugins.Logging.ILogManager">
             <summary>
@@ -2355,88 +2788,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint">
-            <summary>
-            Represents possible end points for a core service client.
-            </summary>
-        </member>
-        <member name="T:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient">
-            <summary>
-            Provides a wrapper of the Tridion SessionAwareCoreServiceClient using a safe implementation of IDisposable.
-            You can use this client inside of a using statement, and calling its Close or Dispose method will safely
-            close out the 
-            </summary>
-            <remarks>
-            Shoutout to Eric Huiza (http://erichuiza.blogspot.com/2013/12/how-to-correctly-dispose-coreservice.html)
-            </remarks>
-        </member>
-        <member name="F:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.isDisposed">
-            <summary>
-            Whether or not the dispose method has already been called.
-            </summary>
-        </member>
-        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.ClientEndpoint">
-            <summary>
-            Gets which entpoint was used to create this core service client.
-            </summary>
-        </member>
-        <member name="P:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.ImpersonatedUsername">
-            <summary>
-            Gets the name of the user that the client was last impersonated with using the Impersonate method.
-            </summary>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.#ctor">
-            <summary>
-            Creates a new SessionAwareCoreServiceClient using a default endpoint config name of netTcp_2013
-            </summary>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.#ctor(Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint)">
-            <summary>
-            Creates a new SessionAwareCoreServiceClient using the supplied endpoint.
-            </summary>
-            <param name="endPoint"></param>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.#ctor(System.String)">
-            <summary>
-            Creates a new SessionAwareCoreServiceClient using the supplied end point configuration name (ie "netTcp_2013").
-            </summary>
-            <param name="endPointConfigurationName"></param>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.GetEnpointConfigurationName(Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint)">
+        <member name="M:Alchemy4Tridion.Plugins.Utilities.CoreServiceUtils.GetEndpointConfigurationName(Alchemy4Tridion.Plugins.Clients.SessionAwareCoreServiceEndPoint)">
             <summary>
             Gets the endpoint configuration name, defaulting to "netTcp_2013".
             </summary>
             <param name="endPoint"></param>
             <returns></returns>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Close">
-            <summary>
-            Hides the underlying client and calls the Dispose method.
-            </summary>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Dispose">
-            <summary>
-            Implements IDisposable and disposes of the WCF client in a safe manner.
-            </summary>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Dispose(System.Boolean)">
-            <summary>
-            Disposes the client in a safe manner.
-            </summary>
-            <param name="disposing"></param>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Impersonate(System.String)">
-            <summary>
-            Impersonates the client as the given account username. Sets the ImpersonatedUsername as a reference
-            to the last username that was impersonated.
-            </summary>
-            <param name="username">The account username.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Alchemy4Tridion.Plugins.Clients.AlchemySessionAwareCoreServiceClient.Finalize">
-            <summary>
-            Finalizer
-            </summary>
         </member>
     </members>
 </doc>
