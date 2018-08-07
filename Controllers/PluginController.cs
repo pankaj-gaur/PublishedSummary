@@ -40,7 +40,7 @@ namespace PublishedSummary.Controllers
         /// </remarks>
         /// 
 
-
+        #region  Get list of all publications
         [HttpGet]
         [Route("GetPublicationList")]
         public List<Publications> GetPublicationList()
@@ -60,18 +60,35 @@ namespace PublishedSummary.Controllers
             }
             return Item2;
         }
+        #endregion
 
+        #region Get List of all publication targets
         [HttpGet]
-        [Route("AjaxGetComponent")]
-        public object AjaxGetComponent()
+        [Route("GetPublicationTarget")]       
+        public object GetPublicationTarget()
+        {
+            var readoptions = new ReadOptions();
+            var filter1 = new TargetTypesFilterData();
+            var allPublicationTargets = Client.GetSystemWideList(filter1);
+            
+            return allPublicationTargets;
+        }
+        #endregion
+
+        #region Get List of all published items
+        [HttpGet]
+        [Route("GetAllPublishedItems")]
+        public object GetAllPublishedItems()
         {
             var itemTypes = new List<ItemType>();
             //dynamic json = pubId;
             itemTypes.Add(ItemType.Component);
+            itemTypes.Add(ItemType.Page);
+            itemTypes.Add(ItemType.ComponentTemplate);
+            itemTypes.Add(ItemType.Category);
             var filter = new RepositoryItemsFilterData();
             filter.Recursive = true;
             filter.ItemTypes = itemTypes.ToArray();
-            //var publishInfo = Client.GetListPublishInfo("tcm:14-1118-64");
             var listXml = Client.GetListXml("tcm:0-" + "14" + "-1", filter);
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(listXml.ToString());
@@ -88,14 +105,9 @@ namespace PublishedSummary.Controllers
                 }
                 
             }
-            return compList;
+            return compList.Item.Where(x => x.PublicationTarget != null); 
         }
+        #endregion
 
-        [HttpPost]
-        [Route("GetPublishedSummary")]
-        public string CreateMM(string tcmURI)
-        {
-            return "Success";
-        }
     }
 }

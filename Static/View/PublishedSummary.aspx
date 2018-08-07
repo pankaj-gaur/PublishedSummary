@@ -36,7 +36,26 @@
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
-                url: document.location.origin + "/Alchemy/Plugins/PublishedSummary/api/Service/AjaxGetComponent",
+                url: document.location.origin + "/Alchemy/Plugins/PublishedSummary/api/Service/GetAllPublishedItems",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    alert(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        });
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: document.location.origin + "/Alchemy/Plugins/PublishedSummary/api/Service/GetPublicationTarget",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
