@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace PublishedSummary.Models.Model
+namespace PublishedSummary.Models.Model 
 {
     [XmlRoot(ElementName = "Item", Namespace = "http://www.tridion.com/ContentManager/5.0")]
     public class Publications
