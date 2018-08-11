@@ -9,6 +9,8 @@ namespace PublishedSummary.GUI
         {
             AddFile("PublishedSummaryCommand.js");
             AddFile("Styles.css");
+            AddFile("published-summary.css");
+            AddFile("custom-control.css");
             AddFile<PluginCommandSet>();
             AddWebApiProxy();
             AttachToView("PublishedSummary.aspx");
