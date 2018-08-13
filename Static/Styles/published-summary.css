@@ -43,7 +43,8 @@
     overflow: hidden;
     width: 35%;*/
 	height: 75px;
-	margin-bottom:10px;
+	margin-bottom:13px;
+    padding-left:0px;
 }
 
 #pub-summary .top-right {
@@ -113,7 +114,7 @@
 
 #pub-summary .summary-grid {
     overflow-y: scroll;
-    max-height: 420px;
+    max-height: 380px;
     margin-bottom: 15px;
     border: 1px solid #867d79;
 }
@@ -162,7 +163,7 @@
 }
 
 #pub-summary .actions {
-    float: right;
+    /*button style*/
 }
 
 #pub-summary .row {
@@ -195,4 +196,6 @@
   background:#EEEEEE
 }
 
-
+.padding-left-5{
+    padding-left:5px;
+}

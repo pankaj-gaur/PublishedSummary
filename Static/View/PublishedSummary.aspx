@@ -12,10 +12,11 @@
     </head>
 	<body>
 		<div id="pub-summary" class="">
+
 			<div class="col-sm-2 fixed">
-				<img src="../img/content-bloom-logo-150x75.jpg" alt="www.contentbloom.com">
-			    <hr>
-			        <div id="clear-filters" class="row text-right clear-filter-link"><a href="#">Clear All Filters</a></div>
+				<img src="../img/content-bloom-logo-150x75.jpg" alt="www.contentbloom.com" />
+			    <hr />
+			    <div id="clear-filters" class="row text-right clear-filter-link"><a href="#">Clear All Filters</a></div>
 			    <div id="publish-target-filters" class="filters">
 				    <h2>Publishing Target</h2>
 				
@@ -86,9 +87,9 @@
 				
 				
 			    </div>
-			</div>
+			</div> <!-- Left Side Panel -->
 
-			<div class="col-sm-9 flex-item">
+			<div class="col-sm-9 flex-item"> 
 				<div class="row">
 					<div class="col-sm-3 top-left">
 						<div class="select">
@@ -125,12 +126,14 @@
 						
 					</div>
 					
-				</div>
+				</div> <!-- Summary Panel and Publication Dropdown -->
+
 				<div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-12 padding-left-5">
 					<hr>
 				</div>
-				</div>
+				</div> <!-- Horizontal Row - Right Pane - Top -->
+
 				<div class="summary-grid">
 					<div class="row-eq-height">
 						<div class="col-xs-1">URI</div>	
@@ -446,9 +449,18 @@
 						<div class="col-xs-1">Date</div>
 						<div class="col-xs-2">Action</div>
 					</div>
-				</div>
-        </div>
-	</div>
+				</div> <!-- Summary Grid -->
+
+                <div class="col-sm-12 actions padding-left-5">
+				    <button class="col-sm-2 button">Export in CSV</button>
+                    <button class="col-sm-2 button">Publish Selected</button>
+                    <button class="col-sm-2 button">Unpublish Selected</button>
+				    <button class="col-sm-3 button">Sync Publishing with Live</button>
+				    <button class="col-sm-2 button">Show Delta</button>
+			    </div> <!-- CTA -->
+
+            </div> <!-- Right Side Panel -->
+	    </div>
 			
 	<script type="text/javascript">var removeSdlWebLoadInterval = setInterval(function () { if (!window.$display) { return; } clearInterval(removeSdlWebLoadInterval); if ($display && !$display.getView()) { if (window._activityIndicatorControl) { window._activityIndicatorControl.dispose(); window._activityIndicatorControl = null; }var sdlWebLoadingIndicator = $('style#loadingIndicator'); if (sdlWebLoadingIndicator) { $dom.removeNode(sdlWebLoadingIndicator); } } }, 500);</script></body>
 </html>
