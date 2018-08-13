@@ -9,10 +9,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	
-    <cc:tridionmanager runat="server" editor="CME">
-    <dependencies runat="server">
-        <dependency runat="server">Alchemy.Plugins.Published_Summary.Resources.PublishedSummaryResourceGroup</dependency>
-        <dependency runat="server">Alchemy.Plugins.Published_Summary.Resources.PluginResourceGroup</dependency></dependencies></cc:tridionmanager></head>
+    </head>
 	<body>
 		<div id="pub-summary" class="">
 			<div class="col-sm-2 fixed">
@@ -91,8 +88,8 @@
 			    </div>
 			</div>
 
-			<div class="col-sm-8 flex-item">
-				<div class=row">
+			<div class="col-sm-9 flex-item">
+				<div class="row">
 					<div class="col-sm-3 top-left">
 						<div class="select">
 								<select name="publications" id="publications">
@@ -106,28 +103,25 @@
 					</div>
 					
 					<div class="col-sm-9 top-left">
-						<div class=col-sm-1><</div>
-						
-						<div class="summary-panel col-sm-5">
-							<div class="summary-panel-heading">Live</div>
-							<div class="summary-panel-details">
+						<div class="col-sm-1 glyphicon glyphicon-chevron-left"></div>
+						<div class=" col-sm-9 summary-panel">
+							<div class="summary-panel-heading col-sm-2">Live</div>
+							<div class="summary-panel-details col-sm-3">
 								<div>Total Published:<b>57</b></div>
 								<div>Pages:<b>37</b></div>
 								<div>Components:<b>13</b></div>
 								<div>Categories:<b>7</b></div>
 							</div>
-						</div>
-						<div class="summary-panel col-sm-5">
-							<div class="summary-panel-heading">Staging</div>
-							<div class="summary-panel-details">
+							<div class="summary-panel-heading col-sm-2">Staging</div>
+							<div class="summary-panel-details col-sm-3">
 								<div>Total Published:<b>68</b></div>
 								<div>Pages:<b>42</b></div>
 								<div>Components:<b>18</b></div>
 								<div>Categories:<b>8</b></div>
 							</div>
 						</div>
-						<div class=col-sm-1>></div>
-						<hr>
+						<div class="col-sm-1 glyphicon glyphicon-chevron-right"></div>
+						
 						
 					</div>
 					

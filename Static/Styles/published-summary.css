@@ -59,13 +59,25 @@
     height: 65px;
 }
 
-#pub-summary .summary-panel-heading {
+#pub-summary .summary-panel .col-sm-1{
+    width:5%;
+}
+
+#pub-summary .summary-panel .col-sm-2 {
+    width: 20%;
+}
+
+#pub-summary .summary-panel .col-sm-3 {
+    width: 25%;
+}
+
+    #pub-summary .summary-panel-heading {
     font-size: 12px;
     font-weight: bold;
     margin-right: 10px;
 	padding-right:10px;
     color: #867d79;
-    float: left;
+    /*float: left;*/
     height: 100%;
     border-right: 0.1em solid #867d79
 }
