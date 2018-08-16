@@ -179,17 +179,18 @@
 }
 
 #pub-summary .col-xs-1{
-  border:solid 1px #CCCCCC;
-  margin-right:-1px;
-  padding:5px;
+  border-bottom:solid 1px #CCCCCC;
+  border-right:solid 1px #CCCCCC;
+  padding-left:2px;
   text-align:center;
   
 }
 
 #pub-summary .col-xs-2{
-  border:solid 1px #CCCCCC;
-  margin-right:-1px;
-  padding:5px;
+  border-bottom:solid 1px #CCCCCC;
+  border-right:solid 1px #CCCCCC;
+  padding-left:2px;
+  text-align:center;
 }
 
 #pub-summary .dark{

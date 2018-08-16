@@ -153,7 +153,10 @@
 						<div class="col-xs-2">URL</div>
 						<div class="col-xs-1">By</div>
 						<div class="col-xs-1">Date</div>
-						<div class="col-xs-2">Action</div>
+						<div class="col-xs-2">
+							<img src="../img/publish.png" alt="Publish"/>
+							<img src="../img/unpublish.png" alt="Unpublish"/>
+						</div>
 					</div>
 					<div class="row-eq-height">
 						<div class="col-xs-1">URI</div>	
