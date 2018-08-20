@@ -29,3 +29,13 @@ Static/img/open.png
 Static/img/publish.png
 Static/img/unpublish.png
 Static/View/test.html
+bin/Debug/PublishedSummary.pdb
+bin/Debug/PublishedSummary.dll
+bin/Debug/PublishedSummary.a4t
+.vs/config/applicationhost.config
+.vs/PublishedSummary/v15/Server/sqlite3/storage.ide
+.vs/PublishedSummary/v15/Server/sqlite3/db.lock
+.vs/PublishedSummary/v14/.suo
+.vs/MassImageUploader/v15/.suo
+.vs/MassImageUploader/v14/.suo
+.vs/MMDownload/v14/.suo
