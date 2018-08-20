@@ -31,4 +31,3 @@ C:\Users\cb-in\Documents\Personal\Hack\PublishedSummary\obj\Debug\PublishedSumma
 C:\Users\cb-in\Documents\Personal\Hack\PublishedSummary\obj\Debug\PublishedSummary.pdb
 C:\Users\cb-in\Documents\Personal\Hack\PublishedSummary\bin\Debug\Alchemy4Tridion.Plugins.Clients.CoreService.dll
 C:\Users\cb-in\Documents\Personal\Hack\PublishedSummary\bin\Debug\Alchemy4Tridion.Plugins.pdb
-C:\Users\cb-in\Documents\Personal\Hack\PublishedSummary\obj\Debug\PublishedSummary.csprojResolveAssemblyReference.cache

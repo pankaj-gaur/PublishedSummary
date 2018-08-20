@@ -162,6 +162,7 @@ namespace PublishedSummary.Controllers
                     item.PublishedAt = lastPublishedDetials.PublishedAt;
                     item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
                     item.User = lastPublishedDetials.User.Title;
+                    item.Type = item.Type == "64" ? "pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
                 }
 
             }
@@ -192,7 +193,7 @@ namespace PublishedSummary.Controllers
                     item.PublishedAt = lastPublishedDetials.PublishedAt;
                     item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
                     item.User = lastPublishedDetials.User.Title;
-                    item.Type = item.Type == "64" ? "pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "ComponentTemplates" : item.Type == "16" ? "Component" : item.Type;
+                    item.Type = item.Type == "64" ? "pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
                 }
 
             }
