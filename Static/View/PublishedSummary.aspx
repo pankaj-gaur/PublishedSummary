@@ -1,6 +1,6 @@
 <%@ Page Inherits="Tridion.Web.UI.Controls.TridionPage" %>
 
-<html>
+<html ng-app="alchmyApp">
 <head runat="server">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="../css/published-summary.css">
@@ -10,74 +10,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
 
 </head>
 <body>
     <script>
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                    $.each(response, function (i, obj) {
-                        var div_data = "<option value=" + obj.id + ">" + obj.title + "</option>";
-                        $(div_data).appendTo('#ddlPubList');
-                    });
-
-                },
-                failure: function (response) {
-
-                },
-                error: function (response) {
-
-                }
-            });
-
-        });
-
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                },
-                failure: function (response) {
-
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert("Error: Get Publication List");
-                    alert(response.responseText);
-                }
-            });
-
-        });
-
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                },
-                failure: function (response) {
-
-                },
-                error: function (response) {
-
-                }
-            });
-
-        });
-
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
@@ -186,23 +123,32 @@
         google.setOnLoadCallback(initialize);
 
     </script>
-    <div id="pub-summary" class="">
+      <script>
+        alchmyApp = angular.module('alchmyApp', []);
+        alchmyApp.controller('alchmyController', function ($scope, $http) {
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
+                $scope.PublicationTarget = response;
+            });
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems").success(function (response) {
+                $scope.PublishedItems = response;
+            });
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
+                $scope.PublicationList = response;
+            });
+        });
+
+    </script>
+    <div id="pub-summary" class="" ng-controller="alchmyController">
 
         <div class="col-sm-2 fixed">
             <img src="../img/content-bloom-logo-150x75.jpg" alt="www.contentbloom.com" />
             <hr />
             <div id="clear-filters" class="row text-right clear-filter-link"><a href="#">Clear All Filters</a></div>
-            <div id="publish-target-filters" class="filters">
+            <div id="publish-target-filters" class="filters" >
                 <h2>Publishing Target</h2>
 
-                <label class="checkbox-container">
-                    Live
-				        <input type="checkbox" checked="checked">
-                    <span class="checkmark"></span>
-                </label>
-
-                <label class="checkbox-container">
-                    Staging
+                <label class="checkbox-container" ng-repeat="data in PublicationTarget">
+                   {{data.title}}
 				        <input type="checkbox" checked="checked">
                     <span class="checkmark"></span>
                 </label>
@@ -278,16 +224,7 @@
                 <div class="col-sm-3 top-left">
                     <div class="select">
                         <select name="publications" id="publications">
-                            <option>
-                            050 Website Publication
-								  <option value="1">
-                            000 Empty Parent
-								  <option value="2">
-                            010 Schema Master
-								  <option value="3">
-                            020 Content Master
-								  <option value="4">
-                            020 Design Master
+                            <option ng-repeat="data in PublicationList" value="{{data.id}}">{{data.title}}</option>
                         </select>
                     </div>
                 </div>
@@ -327,327 +264,25 @@
 
             <div class="summary-grid">
                 <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
+                    <div class="col-xs-2">ID</div>
                     <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
+                    <div class="col-xs-1">Item Type</div>
+                    <div class="col-xs-2">Target</div>
+                    <div class="col-xs-2">By</div>
+                    <div class="col-xs-2">Date</div>
+                    <div class="col-xs-1">Action</div>
                 </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">
+                <div class="row-eq-height" ng-repeat="data in PublishedItems">
+                    <div class="col-xs-2">{{data.id}}</div>
+                    <div class="col-xs-2">{{data.title}}</div>
+                    <div class="col-xs-1">{{data.type}}</div>
+                    <div class="col-xs-2">{{data.publicationTarget}}</div>
+                    <div class="col-xs-2">{{data.user}}</div>
+                    <div class="col-xs-2">{{data.publishedAt}}</div>
+                    <div class="col-xs-1">
                         <img src="../img/publish.png" alt="Publish" />
                         <img src="../img/unpublish.png" alt="Unpublish" />
                     </div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
-                </div>
-                <div class="row-eq-height">
-                    <div class="col-xs-1">URI</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">Path</div>
-                    <div class="col-xs-2">URL</div>
-                    <div class="col-xs-1">By</div>
-                    <div class="col-xs-1">Date</div>
-                    <div class="col-xs-2">Action</div>
                 </div>
             </div>
             <!-- Summary Grid -->
