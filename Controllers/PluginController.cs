@@ -64,32 +64,92 @@ namespace PublishedSummary.Controllers
 
         #region Get List of all publication targets
         [HttpGet]
-        [Route("GetPublicationTarget")]       
+        [Route("GetPublicationTarget")]
         public object GetPublicationTarget()
         {
             var readoptions = new ReadOptions();
             var filter1 = new TargetTypesFilterData();
             var allPublicationTargets = Client.GetSystemWideList(filter1);
-            
+
             return allPublicationTargets;
         }
         #endregion
 
-        #region Get List of all published items
+        #region  Get list of all Pages inside SG
+        [HttpGet]
+        [Route("GetPagesInsideSG")]
+        public object GetPagesInsideSG()
+        {
+            var listXml = Client.GetListXml("tcm:14-192-4", new OrganizationalItemItemsFilterData
+            {
+                ItemTypes = new[] { ItemType.Page },
+                Recursive = true,
+                BaseColumns = ListBaseColumns.Default
+            });
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(listXml.ToString());
+            ListItems pagesList = TransformObjectAndXml.Deserialize<ListItems>(doc);
+            foreach (var item in pagesList.Item)
+            {
+                var publishInfo = Client.GetListPublishInfo(item.ID);
+                if (publishInfo.Count() > 0)
+                {
+                    var lastPublishedDetials = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
+                    item.PublishedAt = lastPublishedDetials.PublishedAt;
+                    item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
+                    item.User = lastPublishedDetials.User.Title;
+                }
+
+            }
+            return pagesList.Item.Where(x => x.PublicationTarget != null);
+        }
+        #endregion
+
+        #region  Get list of all Components inside Folder
+        [HttpGet]
+        [Route("GetComponents")]
+        public object GetComponents()
+        {
+            //string[] fodlerIds = { "tcm:35-504-2", "tcm:35-490-2" };
+            var listXml = Client.GetListXml("tcm:14-217-2", new OrganizationalItemItemsFilterData
+            {
+                ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate },
+                // ComponentTypes=new[] { ComponentType.Normal,ComponentType.Multimedia },
+                Recursive = true,
+                BaseColumns = ListBaseColumns.Default
+            });
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(listXml.ToString());
+            ListItems componentsList = TransformObjectAndXml.Deserialize<ListItems>(doc);
+            foreach (var item in componentsList.Item)
+            {
+                var publishInfo = Client.GetListPublishInfo(item.ID);
+                if (publishInfo.Count() > 0)
+                {
+                    var lastPublishedDetials = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
+                    item.PublishedAt = lastPublishedDetials.PublishedAt;
+                    item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
+                    item.User = lastPublishedDetials.User.Title;
+                }
+
+            }
+            return componentsList.Item.Where(x => x.PublicationTarget != null);
+        }
+        #endregion
+
+        #region Get List of all published items of a Publication(s)
         [HttpGet]
         [Route("GetAllPublishedItems")]
         public object GetAllPublishedItems()
         {
-            var itemTypes = new List<ItemType>();
-            //dynamic json = pubId;
-            itemTypes.Add(ItemType.Component);
-            itemTypes.Add(ItemType.Page);
-            itemTypes.Add(ItemType.ComponentTemplate);
-            itemTypes.Add(ItemType.Category);
-            var filter = new RepositoryItemsFilterData();
-            filter.Recursive = true;
-            filter.ItemTypes = itemTypes.ToArray();
-            var listXml = Client.GetListXml("tcm:0-" + "14" + "-1", filter);
+            var listXml = Client.GetListXml("tcm:0-14-1", new RepositoryItemsFilterData
+            {
+                ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
+                Recursive = true,
+                BaseColumns = ListBaseColumns.Default
+            });
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(listXml.ToString());
             ListItems compList = TransformObjectAndXml.Deserialize<ListItems>(doc);
@@ -103,9 +163,44 @@ namespace PublishedSummary.Controllers
                     item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
                     item.User = lastPublishedDetials.User.Title;
                 }
-                
+
             }
-            return compList.Item.Where(x => x.PublicationTarget != null); 
+            return compList.Item.Where(x => x.PublicationTarget != null);
+        }
+        #endregion
+
+        #region Get GetAnalyticData
+        [HttpGet]
+        [Route("GetAnalyticData")]
+        public object GetAnalyticData()
+        {
+            var listXml = Client.GetListXml("tcm:0-14-1", new RepositoryItemsFilterData
+            {
+                ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
+                Recursive = true,
+                BaseColumns = ListBaseColumns.Default
+            });
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(listXml.ToString());
+            ListItems compList = TransformObjectAndXml.Deserialize<ListItems>(doc);
+            foreach (var item in compList.Item)
+            {
+                var publishInfo = Client.GetListPublishInfo(item.ID);
+                if (publishInfo.Count() > 0)
+                {
+                    var lastPublishedDetials = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
+                    item.PublishedAt = lastPublishedDetials.PublishedAt;
+                    item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
+                    item.User = lastPublishedDetials.User.Title;
+                    item.Type = item.Type == "64" ? "pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "ComponentTemplates" : item.Type == "16" ? "Component" : item.Type;
+                }
+
+            }
+            var readoptions = new ReadOptions();
+            var filter1 = new TargetTypesFilterData();
+            var allPublicationTargets = Client.GetSystemWideList(filter1);
+
+            return compList.Item.Where(x => x.PublicationTarget != null && x.PublicationTarget == "DXA Staging").GroupBy(x => x.Type).Select(c => new { key = c.Key, total = c.Count() }).Where(x => x.key != null);
         }
         #endregion
 

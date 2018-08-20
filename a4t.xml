@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <plugin xmlns:c="https://www.alchemywebstore.com/configuration/definitions" xmlns="http://www.alchemywebstore.com/">
-  <name>Published Summary</name>
+  <name>Published_Summary</name>
   <description><![CDATA[]]></description>
   <references />
   <frameworkVersion>1.0.1.1</frameworkVersion>
+  <AlchemyUploadDialog>None</AlchemyUploadDialog>
 </plugin>
