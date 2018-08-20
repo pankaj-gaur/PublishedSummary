@@ -19,7 +19,7 @@ Alchemy.command("${PluginName}", "PublishedSummary", {
      */
     isEnabled: function (selection) {
         console.log("isEnabled Method");
-        return true;//return this.isAvailable(selection);
+        return this.isAvailable(selection);
     },
 
     /**
@@ -27,21 +27,23 @@ Alchemy.command("${PluginName}", "PublishedSummary", {
      * @returns {boolean}
      */
     isAvailable: function (selection) {
-        return true;
         console.log("isAvailable Method");
         console.log("Selection Count: " + selection.getCount());
-        //if (selection.getCount() > 0) {
-        //    var itemType = $models.getItemType(selection.getItem(0))
-        //    console.log("Item Type Selected: " + itemType)
-        //    if (itemType == $const.ItemType.FOLDER ||
-        //        itemType == $const.ItemType.STRUCTUREGROUP ||
-        //        itemType == $const.ItemType.PUBLICATION ||
-        //        itemType == $const.ItemType.CATEGORYANDKEYWORDS) {
-        //        return true;
-        //    }
+        if (selection.getCount() > 0) {
+            var itemType = $models.getItemType(selection.getItem(0))
+
+            //alert("Item Type:" + itemType + "#Value:" + $const.ItemType.STRUCTUREGROUP + "#" + $const.ItemType.CATEGORYANDKEYWORDS);
+
+            console.log("Item Type Selected: " + itemType)
+            if (itemType == $const.ItemType.FOLDER ||
+                itemType == $const.ItemType.STRUCTURE_GROUP ||
+                itemType == $const.ItemType.PUBLICATION ||
+                itemType == $const.ItemType.CATMAN) {
+                return true;
+            }
             
-        //}
-        //return false;
+        }
+        return false;
     },
 
     /**
@@ -63,7 +65,7 @@ Alchemy.command("${PluginName}", "PublishedSummary", {
             popup.focus();
         }
         else {
-            popup = $popup.create(url, "menubar=no,location=no,resizable=no,scrollbars=yes,status=no,width=1024,height=580", args);
+            popup = $popup.create(url, "menubar=no,location=no,resizable=no,scrollbars=yes,status=no,width=1340,height=580", args);
 
             this.properties.popupInstance = popup;
             this.properties.popupCloseHandler = onPopupClose;

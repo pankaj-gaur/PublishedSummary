@@ -264,24 +264,25 @@
 
             <div class="summary-grid">
                 <div class="row-eq-height">
-                    <div class="col-xs-2">ID</div>
+                    <div class="col-xs-1">ID</div>
                     <div class="col-xs-2">Title</div>
                     <div class="col-xs-1">Item Type</div>
                     <div class="col-xs-2">Target</div>
                     <div class="col-xs-2">By</div>
                     <div class="col-xs-2">Date</div>
-                    <div class="col-xs-1">Action</div>
+                    <div class="col-xs-2">Action</div>
                 </div>
                 <div class="row-eq-height" ng-repeat="data in PublishedItems">
-                    <div class="col-xs-2">{{data.id}}</div>
+                    <div class="col-xs-1">{{data.id}}</div>
                     <div class="col-xs-2">{{data.title}}</div>
                     <div class="col-xs-1">{{data.type}}</div>
                     <div class="col-xs-2">{{data.publicationTarget}}</div>
                     <div class="col-xs-2">{{data.user}}</div>
                     <div class="col-xs-2">{{data.publishedAt}}</div>
-                    <div class="col-xs-1">
-                        <img src="../img/publish.png" alt="Publish" />
-                        <img src="../img/unpublish.png" alt="Unpublish" />
+                    <div class="col-xs-2">
+                        <a href="#" data-toggle="tooltip" title="Publish Item!"><img src="../img/publish.png" alt="Publish" /></a>
+                        <a href="#" data-toggle="tooltip" title="Unpublish Item!"><img src="../img/unpublish.png" alt="Unpublish" /></a>
+                        <a href="#" data-toggle="tooltip" title="Open Item!"><img src="../img/open.png" alt="Open"/></a>
                     </div>
                 </div>
             </div>

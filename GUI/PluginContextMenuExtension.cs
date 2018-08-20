@@ -9,7 +9,7 @@ namespace PublishedSummary.GUI
             AssignId = "";
             InsertBefore = Constants.ContextMenuIds.MainContextMenu.Refresh;
 
-            AddItem("pub_summary_cm", "PublishedSummary", "PublishedSummary");
+            AddItem("pub_summary_cm", "Published Summary", "PublishedSummary");
 
             Dependencies.Add<PluginResourceGroup>();
 
