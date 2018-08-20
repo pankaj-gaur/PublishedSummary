@@ -32,7 +32,7 @@ namespace PublishedSummary.Models
         public string Title { get; set; }
         [XmlAttribute(AttributeName = "Size")]
         public string Size { get; set; }
-
+        public string openItem { get; set; }
         public string schemaname { get; set; }
         public string month { get; set; }
         public string year { get; set; }
@@ -57,7 +57,7 @@ namespace PublishedSummary.Models
         public string Managed { get; set; }
         [XmlAttribute(AttributeName = "ID")]
         public string ID { get; set; }
-
+        
         public string PublicationTarget { get; set; }
         public string User { get; set; }
 

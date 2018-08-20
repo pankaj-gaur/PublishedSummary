@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="GUI\PublishedSummaryResourceGroup.cs" />
     <Compile Include="Helper\GetPublishedInfo.cs" />
+    <Compile Include="Helper\PageURL.cs" />
     <Compile Include="Helper\Transform.cs" />
     <Compile Include="Models\Items.cs" />
     <Compile Include="Models\Publications.cs" />
@@ -107,9 +108,7 @@
     <Content Include="Static\Styles\custom-control.css" />
     <Content Include="Static\Styles\published-summary.css" />
     <Content Include="Static\Styles\Styles.css" />
-    <Content Include="Static\View\PublishedSummary.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
+    <Content Include="Static\View\PublishedSummary.aspx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,6 +9,8 @@ using PublishedSummary.Helper;
 using Newtonsoft.Json.Linq;
 using PublishedSummary.Models;
 using System.Linq;
+using System.Web;
+using System;
 
 namespace PublishedSummary.Controllers
 {
@@ -39,7 +41,7 @@ namespace PublishedSummary.Controllers
         /// order for the js proxy to work correctly.
         /// </remarks>
         /// 
-
+        
         #region  Get list of all publications
         [HttpGet]
         [Route("GetPublicationList")]
@@ -153,6 +155,7 @@ namespace PublishedSummary.Controllers
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(listXml.ToString());
             ListItems compList = TransformObjectAndXml.Deserialize<ListItems>(doc);
+            
             foreach (var item in compList.Item)
             {
                 var publishInfo = Client.GetListPublishInfo(item.ID);
@@ -162,6 +165,7 @@ namespace PublishedSummary.Controllers
                     item.PublishedAt = lastPublishedDetials.PublishedAt;
                     item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
                     item.User = lastPublishedDetials.User.Title;
+                    item.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm="+item.Type+"#id="+item.ID;
                     item.Type = item.Type == "64" ? "pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
                 }
 

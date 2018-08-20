@@ -282,7 +282,7 @@
                     <div class="col-xs-2">
                         <a href="#" data-toggle="tooltip" title="Publish Item!"><img src="../img/publish.png" alt="Publish" /></a>
                         <a href="#" data-toggle="tooltip" title="Unpublish Item!"><img src="../img/unpublish.png" alt="Unpublish" /></a>
-                        <a href="#" data-toggle="tooltip" title="Open Item!"><img src="../img/open.png" alt="Open"/></a>
+                        <a href={{data.openItem}} data-toggle="tooltip" title="Open Item!" target ="_blank"><img src="../img/open.png" alt="Open"/></a>
                     </div>
                 </div>
             </div>
