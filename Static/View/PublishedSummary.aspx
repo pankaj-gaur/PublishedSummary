@@ -278,7 +278,7 @@
                     <div class="col-xs-1">{{data.type}}</div>
                     <div class="col-xs-2">{{data.publicationTarget}}</div>
                     <div class="col-xs-2">{{data.user}}</div>
-                    <div class="col-xs-2">{{data.publishedAt}}</div>
+                    <div class="col-xs-2">{{data.publishedAt | date:"dd/MM/yyyy"}}</div>
                     <div class="col-xs-2">
                         <a href="#" data-toggle="tooltip" title="Publish Item!"><img src="../img/publish.png" alt="Publish" /></a>
                         <a href="#" data-toggle="tooltip" title="Unpublish Item!"><img src="../img/unpublish.png" alt="Unpublish" /></a>
