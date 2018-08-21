@@ -1,21 +1,12 @@
-/**
- * Style the context menu button... #say_hello_cm is defined in our Context Menu Extension class' AssignId property
- */
-.contextmenu #say_hello_cm > .image {
-    background-image: url('/WebUI/Editors/Alchemy/Plugins/Published_Summary/assets/img/hello-16x16.png');
+
+.contextmenu #pub_summary_cm > .image {
+    background-image: url('/WebUI/Editors/Alchemy/Plugins/Published_Summary/assets/img/published-summary-icon-16x16.png');
 }
 
-/**
- * Style the ribbon tool bar button... #SayHelloButton is defined in our Ribbon Toolbar Button class' AssignId property
- */
-/* main icon in full ribbon mode */
-.ribbontoolbar #SayHelloButton.button .image, .ribbontoolbar #SayHelloButton.button .image
-{
-    background-image: url('/WebUI/Editors/Alchemy/Plugins/Published_Summary/assets/img/hello-32x32.png');
+.ribbontoolbar #PublishedSummaryButton.button .image, .ribbontoolbar #PublishedSummaryButton.button .image {
+    background-image: url('/WebUI/Editors/Alchemy/Plugins/Published_Summary/assets/img/published-summary-icon-32x32.png');
 }
 
-/* main icon in minimized ribbon mode */
-.ribbontoolbar.minimized #SayHelloButton.button .image, .ribbontoolbar.minimized #SayHelloButton.button .image
-{
-    background-image: url('/WebUI/Editors/Alchemy/Plugins/Published_Summary/assets/img/hello-16x16.png');
+.ribbontoolbar.minimized #PublishedSummaryButton.button .image, .ribbontoolbar.minimized #PublishedSummaryButton.button .image {
+    background-image: url('/WebUI/Editors/Alchemy/Plugins/Published_Summary/assets/img/published-summary-icon-16x16.png');
 }

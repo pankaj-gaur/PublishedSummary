@@ -122,6 +122,51 @@
         google.load("visualization", "1", { packages: ["corechart"] });
         google.setOnLoadCallback(initialize);
 
+        $(document).ready(function () {
+            $("#btn_export").click(function () {
+                var csvArray = [];
+                var csv = "";
+                console.log($(".row-eq-height"));
+                $(".row-eq-height div").each(function (index) {
+                    if ((index + 1) % 8 != 0) {
+                        csv += $(this).text() + ",";
+                    }
+                    else {
+                        csvArray.push(csv.split(0, -1));
+                        csv = "";
+                    }
+                })
+                downloadJSON2CSV(JSON.stringify(csvArray));
+            });
+
+            function downloadJSON2CSV(objArray) {
+            alert("downloadJSON2Array");
+            var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+            var str = '';
+
+            for (var i = 0; i < array.length; i++) {
+                var line = '';
+                for (var index in array[i]) {
+                    if (line != '') line += ','
+
+                    line += array[i][index];
+                }
+
+                str += line + '\r\n';
+            }
+
+            if (navigator.appName != 'Microsoft Internet Explorer') {
+                window.open('data:text/csv;charset=utf-8,' + escape(str));
+            }
+            else {
+                var popup = window.open('', 'csv', '');
+                popup.document.body.innerHTML = '<pre>' + str + '</pre>';
+            }
+        };
+        });
+
+        
+
     </script>
     <script>
         alchmyApp = angular.module('alchmyApp', []);
@@ -283,7 +328,8 @@
             <!-- Horizontal Row - Right Pane - Top -->
 
             <div class="summary-grid">
-                <div class="row-eq-height">
+                <div class="row-eq-height-header align-middle">
+                    
                     <div class="col-xs-1">ID</div>
                     <div class="col-xs-2">Title</div>
                     <div class="col-xs-1">Item Type</div>
@@ -293,6 +339,7 @@
                     <div class="col-xs-2">Action</div>
                 </div>
                 <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filterPublicationTarget(data)">
+                    
                     <div class="col-xs-1">{{data.id}}</div>
                     <div class="col-xs-2">{{data.title}}</div>
                     <div class="col-xs-1">{{data.type}}</div>
@@ -301,18 +348,18 @@
                     <div class="col-xs-2">{{data.publishedAt | date:"dd/MM/yyyy"}}</div>
                     <div class="col-xs-2">
                         <a href="#" data-toggle="tooltip" title="Publish Item!">
-                            <img src="../img/publish.png" alt="Publish" /></a>
-                        <a href="#" data-toggle="tooltip" title="Unpublish Item!">
-                            <img src="../img/unpublish.png" alt="Unpublish" /></a>
-                        <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
-                            <img src="../img/open.png" alt="Open" /></a>
+                            <img class="action-icon" src="../img/publish.png" alt="Publish" /></a>
+                        <a href="#" class="action-icon" data-toggle="tooltip" title="Unpublish Item!">
+                            <img class="action-icon" src="../img/unpublish.png" alt="Unpublish" /></a>
+                        <a href="{{data.openItem}}" class="action-icon" data-toggle="tooltip" title="Open Item!" target="_blank">
+                            <img class="action-icon" src="../img/open.png" alt="Open" /></a>
                     </div>
                 </div>
             </div>
             <!-- Summary Grid -->
 
             <div class="col-sm-12 actions padding-left-5">
-                <button class="col-sm-2 button">Export in CSV</button>
+                <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
                 <button class="col-sm-2 button">Publish Selected</button>
                 <button class="col-sm-2 button">Unpublish Selected</button>
                 <button class="col-sm-3 button">Sync Publishing with Live</button>
