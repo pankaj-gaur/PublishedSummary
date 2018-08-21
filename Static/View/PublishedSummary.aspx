@@ -5,13 +5,12 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="../css/published-summary.css">
     <link rel="stylesheet" type="text/css" href="../css/custom-control.css">
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
 </head>
 <body>
     <script>
@@ -122,12 +121,26 @@
         google.load("visualization", "1", { packages: ["corechart"] });
         google.setOnLoadCallback(initialize);
 
+
         $(document).ready(function () {
             $("#btn_export").click(function () {
                 var csvArray = [];
                 var csv = "";
-                console.log($(".row-eq-height"));
-                $(".row-eq-height div").each(function (index) {
+                var dom = $$(".row-eq-height div");
+                console.log("DOM: "+dom);
+                for (var index = 0; index < dom.length; index++) {
+                    if ((index + 1) % 7 != 0) {
+                        csv += dom[index].innerText + ",";
+                    }
+                    else {
+                        csvArray.push(csv.split(0, -1));
+                        csv = "";
+                    }
+                }
+                csvArray.push(csv.split(0, -1));
+
+                console.log("csvArray JSON: "+JSON.stringify(csvArray));
+                /*$$(".row-eq-height div").each(function (index) {
                     if ((index + 1) % 8 != 0) {
                         csv += $(this).text() + ",";
                     }
@@ -135,25 +148,22 @@
                         csvArray.push(csv.split(0, -1));
                         csv = "";
                     }
-                })
-                downloadJSON2CSV(JSON.stringify(csvArray));
+                })*/
+                //downloadJSON2CSV(JSON.stringify(csvArray));
+                downloadJSON2CSV(csvArray);
             });
 
             function downloadJSON2CSV(objArray) {
-            alert("downloadJSON2Array");
-            var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+                //var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+                var array = objArray;
+                console.log("Array Passed: "+array);
             var str = '';
-
-            for (var i = 0; i < array.length; i++) {
-                var line = '';
-                for (var index in array[i]) {
-                    if (line != '') line += ','
-
-                    line += array[i][index];
+                console.log("Array Length: " + array.length);
+                for (var i = 0; i < array.length; i++) {
+                    str += array[i] + '\r\n';
                 }
 
-                str += line + '\r\n';
-            }
+                console.log("str: "+ str);
 
             if (navigator.appName != 'Microsoft Internet Explorer') {
                 window.open('data:text/csv;charset=utf-8,' + escape(str));
@@ -370,7 +380,6 @@
         </div>
         <!-- Right Side Panel -->
     </div>
-
     <script type="text/javascript">var removeSdlWebLoadInterval = setInterval(function () { if (!window.$display) { return; } clearInterval(removeSdlWebLoadInterval); if ($display && !$display.getView()) { if (window._activityIndicatorControl) { window._activityIndicatorControl.dispose(); window._activityIndicatorControl = null; } var sdlWebLoadingIndicator = $('style#loadingIndicator'); if (sdlWebLoadingIndicator) { $dom.removeNode(sdlWebLoadingIndicator); } } }, 500);</script>
 </body>
 </html>
