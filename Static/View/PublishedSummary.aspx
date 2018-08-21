@@ -123,7 +123,7 @@
         google.setOnLoadCallback(initialize);
 
     </script>
-      <script>
+    <script>
         alchmyApp = angular.module('alchmyApp', []);
         alchmyApp.controller('alchmyController', function ($scope, $http) {
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
@@ -135,6 +135,23 @@
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
                 $scope.PublicationList = response;
             });
+
+            $scope.publicationTargets = [];
+
+            //$scope.pages = true;
+
+            $scope.filterPublicationTarget = function (pts) {
+                return function (pt) {
+                    for (var i in $scope.publicationTargets) {
+                        if (pt.publicationTarget == $scope.PublicationTarget[i].title && $scope.publicationTargets[i]) {
+                            return true;
+                        }
+                    }
+                    //if (itemType.Type == "pages" && $scope.pages) {
+                    //    return true;
+                    //}
+                };
+            };
         });
 
     </script>
@@ -144,13 +161,12 @@
             <img src="../img/content-bloom-logo-150x75.jpg" alt="www.contentbloom.com" />
             <hr />
             <div id="clear-filters" class="row text-right clear-filter-link"><a href="#">Clear All Filters</a></div>
-            <div id="publish-target-filters" class="filters" >
+            <div id="publish-target-filters" class="filters">
                 <h2>Publishing Target</h2>
 
                 <label class="checkbox-container" ng-repeat="data in PublicationTarget">
-                   {{data.title}}
-				        <input type="checkbox" checked="checked">
-                    <span class="checkmark"></span>
+                    <input type="checkbox" ng-model="publicationTargets[$index]" />{{data.title}}
+                     <span class="checkmark"></span>
                 </label>
             </div>
 
@@ -227,6 +243,10 @@
                             <option ng-repeat="data in PublicationList" value="{{data.id}}">{{data.title}}</option>
                         </select>
                     </div>
+                    <div>
+                        Search: 
+                        <input type="text" placeholder="Search" ng-model="SearchText" />
+                    </div>
                 </div>
 
                 <div class="col-sm-9 top-left">
@@ -272,7 +292,7 @@
                     <div class="col-xs-2">Date</div>
                     <div class="col-xs-2">Action</div>
                 </div>
-                <div class="row-eq-height" ng-repeat="data in PublishedItems">
+                <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filterPublicationTarget(data)">
                     <div class="col-xs-1">{{data.id}}</div>
                     <div class="col-xs-2">{{data.title}}</div>
                     <div class="col-xs-1">{{data.type}}</div>
@@ -280,9 +300,12 @@
                     <div class="col-xs-2">{{data.user}}</div>
                     <div class="col-xs-2">{{data.publishedAt | date:"dd/MM/yyyy"}}</div>
                     <div class="col-xs-2">
-                        <a href="#" data-toggle="tooltip" title="Publish Item!"><img src="../img/publish.png" alt="Publish" /></a>
-                        <a href="#" data-toggle="tooltip" title="Unpublish Item!"><img src="../img/unpublish.png" alt="Unpublish" /></a>
-                        <a href={{data.openItem}} data-toggle="tooltip" title="Open Item!" target ="_blank"><img src="../img/open.png" alt="Open"/></a>
+                        <a href="#" data-toggle="tooltip" title="Publish Item!">
+                            <img src="../img/publish.png" alt="Publish" /></a>
+                        <a href="#" data-toggle="tooltip" title="Unpublish Item!">
+                            <img src="../img/unpublish.png" alt="Unpublish" /></a>
+                        <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
+                            <img src="../img/open.png" alt="Open" /></a>
                     </div>
                 </div>
             </div>
