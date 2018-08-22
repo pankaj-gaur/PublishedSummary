@@ -4,19 +4,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tridion.ContentManager.CoreService.Client;
 
 namespace PublishedSummary.Helper
 {
    public class GetPublishedInfo
     {
-        //public IEnumerable<ListItems> getPubInfo(ListItems i)
+        //public List<Item> getPubInfo(List<ListItems> MultipleListItems)
         //{
-             
-        //    foreach (var item in i)
+        //    foreach (var MultipleListItem in MultipleListItems)
         //    {
-        //        compList.PublicationTarget = item.PublicationTarget.Title;
-        //        compList.User = item.User.Title;
-        //        compList.PublishedAt = item.PublishedAt;
+        //        foreach (var item in MultipleListItem.Item)
+        //        {
+        //            var publishInfo = Client.GetListPublishInfo(item.ID);
+        //            if (publishInfo.Count() > 0)
+        //            {
+        //                var lastPublishedDetials = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
+        //                item.PublishedAt = lastPublishedDetials.PublishedAt;
+        //                item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
+        //                item.User = lastPublishedDetials.User.Title;
+        //            }
+
+        //        }
+
+        //    }
+
+        //    var PublishedItems = from MultipleListItem in MultipleListItems
+        //                         select MultipleListItem.Item.Where(x => x.PublicationTarget != null).ToList();
+
+        //    List<Item> finalList = new List<Item>();
+        //    foreach (var PublishedItem in PublishedItems)
+        //    {
+        //        foreach (var item in PublishedItem)
+        //        {
+        //            finalList.Add(item);
+        //        }
         //    }
 
         //}

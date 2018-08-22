@@ -38,10 +38,10 @@ namespace PublishedSummary.Models
         public string year { get; set; }
         public string iscurrentYear { get; set; }
 
-        public string PublicationTarget { get; set; }
-        public string User { get; set; }
+        public List<string> PublicationTarget { get; set; }
+        public List<string> User { get; set; }
 
-        public DateTime PublishedAt { get; set; }
+        public List<DateTime> PublishedAt { get; set; }
     }
 
     [XmlRoot(ElementName = "ListItems", Namespace = "http://www.tridion.com/ContentManager/5.0")]
