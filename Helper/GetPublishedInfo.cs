@@ -1,4 +1,17 @@
-﻿using Alchemy4Tridion.Plugins;
+﻿// ***********************************************************************
+// Assembly         : PublishedSummary
+// Author           : admin
+// Created          : 08-20-2018
+//
+// Last Modified By : admin
+// Last Modified On : 08-22-2018
+// ***********************************************************************
+// <copyright file="GetPublishedInfo.cs" company="Content Bloom">
+//     Copyright © Content Bloom 2018
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Alchemy4Tridion.Plugins;
 using PublishedSummary.Models;
 using System;
 using System.Collections.Generic;
@@ -9,8 +22,17 @@ using Tridion.ContentManager.CoreService.Client;
 
 namespace PublishedSummary.Helper
 {
-    public  class GetPublishedInfo : AlchemyApiController
+    /// <summary>
+    /// Class GetPublishedInfo.
+    /// </summary>
+    /// <seealso cref="Alchemy4Tridion.Plugins.AlchemyApiController" />
+    public class GetPublishedInfo : AlchemyApiController
     {
+        /// <summary>
+        /// Gets the published information list.
+        /// </summary>
+        /// <param name="multipleListItems">The multiple list items.</param>
+        /// <returns>List&lt;Item&gt;.</returns>
         public List<Item> GetPublishedInfoList(List<ListItems> multipleListItems)
         {
             var publishedItems = from multipleListItem in multipleListItems

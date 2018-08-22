@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : PublishedSummary
+// Author           : admin
+// Created          : 08-20-2018
+//
+// Last Modified By : admin
+// Last Modified On : 08-22-2018
+// ***********************************************************************
+// <copyright file="Transform.cs" company="Content Bloom">
+//     Copyright © Content Bloom 2018
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
