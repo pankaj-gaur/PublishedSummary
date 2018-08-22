@@ -43,6 +43,7 @@ namespace PublishedSummary.Controllers
         /// 
 
         #region  Get list of all publications
+        
         [HttpGet]
         [Route("GetPublicationList")]
         public List<Publications> GetPublicationList()
@@ -52,32 +53,41 @@ namespace PublishedSummary.Controllers
             XElement publications = Client.GetSystemWideListXml(filter);
             publicationList.Load(publications.CreateReader());
             ListPublications pubList = TransformObjectAndXml.Deserialize<ListPublications>(publicationList);
-            List<Publications> Item = pubList.Item;
-            List<Publications> Item2 = new List<Publications>();
-            foreach (var item in Item)
+            List<Publications> items = pubList.Item;
+            List<Publications> item2 = new List<Publications>();
+            foreach (var item in items)
             {
-                var splitTCMID = item.ID.Split('-');
-                item.ID = splitTCMID[1];
-                Item2.Add(item);
+                var splitTcmid = item.ID.Split('-');
+                item.ID = splitTcmid[1];
+                item2.Add(item);
             }
-            return Item2;
+            return item2;
         }
         #endregion
 
         #region Get List of all publication targets
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetPublicationTarget")]
         public object GetPublicationTarget()
         {
-            var readoptions = new ReadOptions();
-            var filter1 = new TargetTypesFilterData();
-            var allPublicationTargets = Client.GetSystemWideList(filter1);
+            
+            var filter = new TargetTypesFilterData();
+            var allPublicationTargets = Client.GetSystemWideList(filter);
 
             return allPublicationTargets;
         }
         #endregion
 
         #region  Get list of all Pages inside SG
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="IDs"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetPagesInsideSG")]
         public List<Item> GetPagesInsideSG(JObject IDs)
@@ -91,119 +101,149 @@ namespace PublishedSummary.Controllers
                 {
                     ItemTypes = new[] { ItemType.Page },
                     Recursive = true,
-                    BaseColumns = ListBaseColumns.Default
+                    BaseColumns = ListBaseColumns.Extended
                 });
-
-
+                if (listXml == null) throw new ArgumentNullException(nameof(listXml));
                 doc.LoadXml(listXml.ToString());
                 multipleListItems.Add(TransformObjectAndXml.Deserialize<ListItems>(doc));
             }
+            var publishedItems = from multipleListItem in multipleListItems
+                select multipleListItem.Item.Where(x => x.IsPublished == "true").ToList();
 
-            foreach (var multipleListItem in multipleListItems)
+            IEnumerable<List<Item>> listItems = publishedItems.ToList();
+            
+            foreach (var publishedItem in listItems)
             {
-                foreach (var item in multipleListItem.Item)
+                foreach (var item in publishedItem)
                 {
                     var publishInfo = Client.GetListPublishInfo(item.ID);
-                    if (publishInfo.Any())
+                    if (!publishInfo.Any()) continue;
+                    IEnumerable<PublishInfoData> GetPublishedInfo = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
+
+                    foreach (var getPublishedInfo in GetPublishedInfo)
                     {
-                        var ff = publishInfo.OrderByDescending(ww => ww.PublishedAt).GroupBy(x => x.PublicationTarget.Title).Select(x => x.FirstOrDefault());
-
-                        foreach (var data in ff)
-                        {
-
-                            var lastPublishedDetails = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
-                            item.PublishedAt.Add(data.PublishedAt);
-                            item.PublicationTarget.Add(data.PublicationTarget.Title);
-                            item.User.Add(data.User.Title);
-                        }
-                        //var lastPublishedDetails = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
-                        //item.PublishedAt = lastPublishedDetails.PublishedAt;
-                        //item.PublicationTarget = lastPublishedDetails.PublicationTarget.Title;
-                        //item.User = lastPublishedDetails.User.Title;
+                        if (getPublishedInfo == null) continue;
+                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        item.User?.Add(getPublishedInfo.User.Title);
                     }
 
                 }
 
             }
-
-            var publishedItems = from multipleListItem in multipleListItems
-                select multipleListItem.Item.Where(x => x.PublicationTarget.Any()).ToList();
-
-            List<Item> finalList = publishedItems.SelectMany(publishedItem => publishedItem).ToList();
+            List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
 
             return finalList;
         }
         #endregion
 
         #region  Get list of all Components inside Folder
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetComponents")]
         public object GetComponents()
         {
             //string[] fodlerIds = { "tcm:35-504-2", "tcm:35-490-2" };
-            var listXml = Client.GetListXml("tcm:14-217-2", new OrganizationalItemItemsFilterData
-            {
-                ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate },
-                ComponentTypes=new[] { ComponentType.Normal,ComponentType.Multimedia },
-                Recursive = true,
-                BaseColumns = ListBaseColumns.Default
-            });
-
+            string[] FolderIDs = { "tcm:14-62-2" };
+            List<ListItems> multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(listXml.ToString());
-            ListItems componentsList = TransformObjectAndXml.Deserialize<ListItems>(doc);
-            foreach (var item in componentsList.Item)
+            foreach (var folderID in FolderIDs)
             {
-                var publishInfo = Client.GetListPublishInfo(item.ID);
-                var ff = publishInfo.OrderByDescending(y => y.PublishedAt).GroupBy(x => x.PublicationTarget.Title).Select(x => x.FirstOrDefault());
-                foreach (var data in ff)
+                var listXml = Client.GetListXml(folderID, new OrganizationalItemItemsFilterData
                 {
-                    item.PublishedAt.Add(data.PublishedAt);
-                    item.PublicationTarget.Add(data.PublicationTarget.Title);
-                    item.User.Add(data.User.Title);
-                    
+                    ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate },
+                    ComponentTypes = new[] { ComponentType.Normal, ComponentType.Multimedia },
+                    Recursive = true,
+                    BaseColumns = ListBaseColumns.Extended
+                });
+                if (listXml == null) throw new ArgumentNullException(nameof(listXml));
+                doc.LoadXml(listXml.ToString());
+                multipleListItems.Add(TransformObjectAndXml.Deserialize<ListItems>(doc));
+            }
+            var publishedItems = from multipleListItem in multipleListItems
+                                 select multipleListItem.Item.Where(x => x.IsPublished == "true").ToList();
+
+            IEnumerable<List<Item>> listItems = publishedItems.ToList();
+
+            foreach (var publishedItem in listItems)
+            {
+                foreach (var item in publishedItem)
+                {
+                    var publishInfo = Client.GetListPublishInfo(item.ID);
+                    if (!publishInfo.Any()) continue;
+                    IEnumerable<PublishInfoData> GetPublishedInfo = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
+
+                    foreach (var getPublishedInfo in GetPublishedInfo)
+                    {
+                        if (getPublishedInfo == null) continue;
+                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        item.User?.Add(getPublishedInfo.User.Title);
+                    }
+
                 }
 
             }
-            return componentsList.Item.Where(x => x.PublicationTarget != null);
+            List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
+            return finalList;
         }
         #endregion
 
         #region Get List of all published items of a Publication(s)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetAllPublishedItems")]
         public object GetAllPublishedItems()
         {
-            var listXml = Client.GetListXml("tcm:0-14-1", new RepositoryItemsFilterData
-            {
-                ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
-                //ComponentTypes = new[] { ComponentType.Normal, ComponentType.Multimedia },
-                Recursive = true,
-                BaseColumns = ListBaseColumns.Default
-            });
+            string[] pubIDs = { "tcm:0-14-1", "tcm:0-9-1" };
+            List<ListItems> multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(listXml.ToString());
-            ListItems compList = TransformObjectAndXml.Deserialize<ListItems>(doc);
-
-            foreach (var item in compList.Item)
+            foreach (var pubId in pubIDs)
             {
-                var publishInfo = Client.GetListPublishInfo(item.ID);
-                if (publishInfo.Any())
+                var listXml = Client.GetListXml(pubId, new RepositoryItemsFilterData
                 {
-                    var ff = publishInfo.OrderByDescending(y => y.PublishedAt).GroupBy(x => x.PublicationTarget.Title).Select(x => x.FirstOrDefault());
-                    foreach (var data in ff)
+                    ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
+                    Recursive = true,
+                    BaseColumns = ListBaseColumns.Extended
+                });
+                if (listXml == null) throw new ArgumentNullException(nameof(listXml));
+                doc.LoadXml(listXml.ToString());
+                multipleListItems.Add(TransformObjectAndXml.Deserialize<ListItems>(doc));
+            }
+            var publishedItems = from multipleListItem in multipleListItems
+                                 select multipleListItem.Item.Where(x => x.IsPublished == "true").ToList();
+
+            IEnumerable<List<Item>> listItems = publishedItems.ToList();
+
+            foreach (var publishedItem in listItems)
+            {
+                foreach (var item in publishedItem)
+                {
+                    var publishInfo = Client.GetListPublishInfo(item.ID);
+                    if (!publishInfo.Any()) continue;
+                    IEnumerable<PublishInfoData> GetPublishedInfo = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
+
+                    foreach (var getPublishedInfo in GetPublishedInfo)
                     {
-                        item.PublishedAt.Add(data.PublishedAt);
-                        item.PublicationTarget.Add(data.PublicationTarget.Title);
-                        item.User.Add(data.User.Title);
+                        if (getPublishedInfo == null) continue;
+                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        item.User?.Add(getPublishedInfo.User.Title);
                         item.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
                         item.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
                     }
-                    
+
                 }
 
             }
-            return compList.Item.Where(x => x.PublicationTarget.Count>0);
+            List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
+            return finalList;
         }
         #endregion
 

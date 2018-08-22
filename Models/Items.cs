@@ -41,6 +41,8 @@ namespace PublishedSummary.Models
         public List<string> PublicationTarget { get; set; }
         public List<string> User { get; set; }
 
+        [XmlAttribute(AttributeName = "IsPublished")]
+        public string IsPublished { get; set; }
         public List<DateTime> PublishedAt { get; set; }
     }
 
