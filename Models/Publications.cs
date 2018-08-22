@@ -7,6 +7,9 @@ using System.Xml.Serialization;
 
 namespace PublishedSummary.Models.Model 
 {
+    /// <summary>
+    /// Class Publications.
+    /// </summary>
     [XmlRoot(ElementName = "Item", Namespace = "http://www.tridion.com/ContentManager/5.0")]
     public class Publications
     {
@@ -23,6 +26,9 @@ namespace PublishedSummary.Models.Model
         [XmlAttribute(AttributeName = "ID")]
         public string ID { get; set; }
     }
+    /// <summary>
+    /// Class ListPublications.
+    /// </summary>
     [XmlRoot(ElementName = "ListPublications", Namespace = "http://www.tridion.com/ContentManager/5.0")]
     public class ListPublications
     {

@@ -1,4 +1,5 @@
-﻿using PublishedSummary.Models;
+﻿using Alchemy4Tridion.Plugins;
+using PublishedSummary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,39 +9,40 @@ using Tridion.ContentManager.CoreService.Client;
 
 namespace PublishedSummary.Helper
 {
-   public class GetPublishedInfo
+    public  class GetPublishedInfo : AlchemyApiController
     {
-        //public List<Item> getPubInfo(List<ListItems> MultipleListItems)
-        //{
-        //    foreach (var MultipleListItem in MultipleListItems)
-        //    {
-        //        foreach (var item in MultipleListItem.Item)
-        //        {
-        //            var publishInfo = Client.GetListPublishInfo(item.ID);
-        //            if (publishInfo.Count() > 0)
-        //            {
-        //                var lastPublishedDetials = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
-        //                item.PublishedAt = lastPublishedDetials.PublishedAt;
-        //                item.PublicationTarget = lastPublishedDetials.PublicationTarget.Title;
-        //                item.User = lastPublishedDetials.User.Title;
-        //            }
+        public List<Item> GetPublishedInfoList(List<ListItems> multipleListItems)
+        {
+            var publishedItems = from multipleListItem in multipleListItems
+                                 select multipleListItem.Item.Where(x => x.IsPublished == "true").ToList();
 
-        //        }
+            IEnumerable<List<Item>> listItems = publishedItems.ToList();
 
-        //    }
+            foreach (var publishedItem in listItems)
+            {
+                foreach (var item in publishedItem)
+                {
+                    var publishInfo = Client.GetListPublishInfo(item.ID);
+                    if (!publishInfo.Any()) continue;
+                    IEnumerable<PublishInfoData> getPublishedInfos = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
 
-        //    var PublishedItems = from MultipleListItem in MultipleListItems
-        //                         select MultipleListItem.Item.Where(x => x.PublicationTarget != null).ToList();
+                    foreach (var getPublishedInfo in getPublishedInfos)
+                    {
+                        if (getPublishedInfo == null) continue;
+                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        item.User?.Add(getPublishedInfo.User.Title);
+                        item.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
+                        item.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
+                    }
 
-        //    List<Item> finalList = new List<Item>();
-        //    foreach (var PublishedItem in PublishedItems)
-        //    {
-        //        foreach (var item in PublishedItem)
-        //        {
-        //            finalList.Add(item);
-        //        }
-        //    }
+                }
 
-        //}
+            }
+            List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
+
+            return finalList;
+
+        }
     }
 }

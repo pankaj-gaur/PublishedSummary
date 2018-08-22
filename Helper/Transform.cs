@@ -9,9 +9,18 @@ using System.Xml.Serialization;
 
 namespace PublishedSummary.Helper
 {
-  public class TransformObjectAndXml
+    /// <summary>
+    /// Class TransformObjectAndXml.
+    /// </summary>
+    public class TransformObjectAndXml
         {
-            public static T Deserialize<T>(XmlDocument xmlDocument)
+        /// <summary>
+        /// Deserializes the specified XML document.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xmlDocument">The XML document.</param>
+        /// <returns>T.</returns>
+        public static T Deserialize<T>(XmlDocument xmlDocument)
             {
                 XmlSerializer ser = new XmlSerializer(typeof(T));
 
@@ -21,7 +30,14 @@ namespace PublishedSummary.Helper
                 return (T)ser.Deserialize(xmlReader);
             }
 
-            public static bool Serialize<T>(T value, ref string serializeXml)
+        /// <summary>
+        /// Serializes the specified value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <param name="serializeXml">The serialize XML.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool Serialize<T>(T value, ref string serializeXml)
             {
                 try
                 {

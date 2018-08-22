@@ -1,4 +1,17 @@
-﻿using Alchemy4Tridion.Plugins;
+﻿// ***********************************************************************
+// Assembly         : PublishedSummary
+// Author           : admin
+// Created          : 08-20-2018
+//
+// Last Modified By : admin
+// Last Modified On : 08-22-2018
+// ***********************************************************************
+// <copyright file="PluginController.cs" company="Content Bloom">
+//     Copyright © Content Bloom 2018
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Alchemy4Tridion.Plugins;
 using System.Web.Http;
 using Tridion.ContentManager.CoreService.Client;
 using System.Xml.Linq;
@@ -17,33 +30,22 @@ namespace PublishedSummary.Controllers
     /// <summary>
     /// An ApiController to create web services that your plugin can interact with.
     /// </summary>
-    /// <remarks>
-    /// The AlchemyRoutePrefix accepts a Service Name as its first parameter.  This will be used by both
+    /// <seealso cref="Alchemy4Tridion.Plugins.AlchemyApiController" />
+    /// <remarks>The AlchemyRoutePrefix accepts a Service Name as its first parameter.  This will be used by both
     /// the generated Url's as well as the generated JS proxy.
-    /// <c>/Alchemy/Plugins/{YourPluginName}/api/{ServiceName}/{action}</c>
-    /// <c>Alchemy.Plugins.YourPluginName.Api.Service.action()</c>
-    /// 
+    /// <c>/Alchemy/Plugins/{YourPluginName}/api/{ServiceName}/{action}</c><c>Alchemy.Plugins.YourPluginName.Api.Service.action()</c>
     /// The attribute is optional and if you exclude it, url's and methods will be attached to "api" instead.
-    /// <c>/Alchemy/Plugins/{YourPluginName}/api/{action}</c>
-    /// <c>Alchemy.Plugins.YourPluginName.Api.action()</c>
-    /// </remarks>
+    /// <c>/Alchemy/Plugins/{YourPluginName}/api/{action}</c><c>Alchemy.Plugins.YourPluginName.Api.action()</c></remarks>
     [AlchemyRoutePrefix("Service")]
     public class PluginController : AlchemyApiController
     {
-        /// // GET /Alchemy/Plugins/{YourPluginName}/api/{YourServiceName}/YourRoute
-        /// <summary>
-        /// Just a simple example..
-        /// </summary>
-        /// <returns>A string "Your Response" as the response message.</returns>
-        /// </summary>
-        /// <remarks>
-        /// All of your action methods must have both a verb attribute as well as the RouteAttribute in
-        /// order for the js proxy to work correctly.
-        /// </remarks>
-        /// 
+
 
         #region  Get list of all publications
-        
+        /// <summary>
+        /// Gets the publication list.
+        /// </summary>
+        /// <returns>List&lt;Publications&gt;.</returns>
         [HttpGet]
         [Route("GetPublicationList")]
         public List<Publications> GetPublicationList()
@@ -67,9 +69,9 @@ namespace PublishedSummary.Controllers
 
         #region Get List of all publication targets
         /// <summary>
-        /// 
+        /// Gets the publication target.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>System.Object.</returns>
         [HttpGet]
         [Route("GetPublicationTarget")]
         public object GetPublicationTarget()
@@ -84,20 +86,23 @@ namespace PublishedSummary.Controllers
 
         #region  Get list of all Pages inside SG
         /// <summary>
-        /// 
+        /// Gets the pages inside sg.
         /// </summary>
-        /// <param name="IDs"></param>
-        /// <returns></returns>
+        /// <param name="IDs">The ids.</param>
+        /// <returns>List&lt;Item&gt;.</returns>
+        /// <exception cref="ArgumentNullException">listXml</exception>
         [HttpPost]
         [Route("GetPagesInsideSG")]
         public List<Item> GetPagesInsideSG(JObject IDs)
         {
-            string[] SgIDs = { "tcm:14-65-4"};
+            
+            dynamic tcmIDs = IDs;
+            var sgIDs = tcmIDs.IDs;
             List<ListItems> multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
-            foreach (var sgId in SgIDs)
+            foreach (var sgId in sgIDs)
             {
-                var listXml = Client.GetListXml(sgId, new OrganizationalItemItemsFilterData
+                var listXml = Client.GetListXml(sgId.ToString(), new OrganizationalItemItemsFilterData
                 {
                     ItemTypes = new[] { ItemType.Page },
                     Recursive = true,
@@ -118,9 +123,9 @@ namespace PublishedSummary.Controllers
                 {
                     var publishInfo = Client.GetListPublishInfo(item.ID);
                     if (!publishInfo.Any()) continue;
-                    IEnumerable<PublishInfoData> GetPublishedInfo = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
+                    IEnumerable<PublishInfoData> getPublishedInfos = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
 
-                    foreach (var getPublishedInfo in GetPublishedInfo)
+                    foreach (var getPublishedInfo in getPublishedInfos)
                     {
                         if (getPublishedInfo == null) continue;
                         item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
@@ -139,9 +144,10 @@ namespace PublishedSummary.Controllers
 
         #region  Get list of all Components inside Folder
         /// <summary>
-        /// 
+        /// Gets the components.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>System.Object.</returns>
+        /// <exception cref="ArgumentNullException">listXml</exception>
         [HttpGet]
         [Route("GetComponents")]
         public object GetComponents()
@@ -174,9 +180,9 @@ namespace PublishedSummary.Controllers
                 {
                     var publishInfo = Client.GetListPublishInfo(item.ID);
                     if (!publishInfo.Any()) continue;
-                    IEnumerable<PublishInfoData> GetPublishedInfo = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
+                    IEnumerable<PublishInfoData> getPublishedInfos = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
 
-                    foreach (var getPublishedInfo in GetPublishedInfo)
+                    foreach (var getPublishedInfo in getPublishedInfos)
                     {
                         if (getPublishedInfo == null) continue;
                         item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
@@ -192,11 +198,12 @@ namespace PublishedSummary.Controllers
         }
         #endregion
 
-        #region Get List of all published items of a Publication(s)
+        #region Get List of all published items in a Publication(s)
         /// <summary>
-        /// 
+        /// Gets all published items.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>System.Object.</returns>
+        /// <exception cref="ArgumentNullException">listXml</exception>
         [HttpGet]
         [Route("GetAllPublishedItems")]
         public object GetAllPublishedItems()
@@ -227,9 +234,9 @@ namespace PublishedSummary.Controllers
                 {
                     var publishInfo = Client.GetListPublishInfo(item.ID);
                     if (!publishInfo.Any()) continue;
-                    IEnumerable<PublishInfoData> GetPublishedInfo = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
+                    IEnumerable<PublishInfoData> getPublishedInfos = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
 
-                    foreach (var getPublishedInfo in GetPublishedInfo)
+                    foreach (var getPublishedInfo in getPublishedInfos)
                     {
                         if (getPublishedInfo == null) continue;
                         item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
@@ -248,6 +255,10 @@ namespace PublishedSummary.Controllers
         #endregion
 
         #region Get GetAnalyticData
+        /// <summary>
+        /// Gets the analytic data.
+        /// </summary>
+        /// <returns>System.Object.</returns>
         [HttpGet]
         [Route("GetAnalyticData")]
         public object GetAnalyticData()

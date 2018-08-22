@@ -19,7 +19,7 @@
             $.ajax({
                 type: "POST",
                 url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPagesInsideSG",
-                data: "{'IDs':['tcm:14-192-4','tcm:14-193-4']}",
+                data: "{'IDs':['tcm:14-65-4']}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
