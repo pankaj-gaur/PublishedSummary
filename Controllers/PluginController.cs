@@ -22,9 +22,7 @@ using PublishedSummary.Helper;
 using Newtonsoft.Json.Linq;
 using PublishedSummary.Models;
 using System.Linq;
-using System.Web;
 using System;
-using Newtonsoft.Json;
 namespace PublishedSummary.Controllers
 {
     /// <summary>
