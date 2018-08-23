@@ -195,10 +195,10 @@
 
             $scope.publicationTargets = [];
 
-            $scope.pages;
-            $scope.components;
-            $scope.categories;
-            $scope.templates;
+            $scope.pages = true;
+            $scope.components = true;
+            $scope.categories =true ;
+            $scope.templates=true;
 
             $scope.filteredPublishedItems = function (items) {
                 return function (item) {
