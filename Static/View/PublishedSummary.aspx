@@ -15,7 +15,7 @@
 <body>
     <script>
         $(document).ready(function () {
-           
+
             $.ajax({
                 type: "POST",
                 url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPagesInsideSG",
@@ -129,7 +129,7 @@
                 var csvArray = [];
                 var csv = "";
                 var dom = $$(".row-eq-height div");
-                console.log("DOM: "+dom);
+                console.log("DOM: " + dom);
                 for (var index = 0; index < dom.length; index++) {
                     if ((index + 1) % 7 != 0) {
                         csv += dom[index].innerText + ",";
@@ -141,7 +141,7 @@
                 }
                 csvArray.push(csv.split(0, -1));
 
-                console.log("csvArray JSON: "+JSON.stringify(csvArray));
+                console.log("csvArray JSON: " + JSON.stringify(csvArray));
                 /*$$(".row-eq-height div").each(function (index) {
                     if ((index + 1) % 8 != 0) {
                         csv += $(this).text() + ",";
@@ -158,26 +158,26 @@
             function downloadJSON2CSV(objArray) {
                 //var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
                 var array = objArray;
-                console.log("Array Passed: "+array);
-            var str = '';
+                console.log("Array Passed: " + array);
+                var str = '';
                 console.log("Array Length: " + array.length);
                 for (var i = 0; i < array.length; i++) {
                     str += array[i] + '\r\n';
                 }
 
-                console.log("str: "+ str);
+                console.log("str: " + str);
 
-            if (navigator.appName != 'Microsoft Internet Explorer') {
-                window.open('data:text/csv;charset=utf-8,' + escape(str));
-            }
-            else {
-                var popup = window.open('', 'csv', '');
-                popup.document.body.innerHTML = '<pre>' + str + '</pre>';
-            }
-        };
+                if (navigator.appName != 'Microsoft Internet Explorer') {
+                    window.open('data:text/csv;charset=utf-8,' + escape(str));
+                }
+                else {
+                    var popup = window.open('', 'csv', '');
+                    popup.document.body.innerHTML = '<pre>' + str + '</pre>';
+                }
+            };
         });
 
-        
+
 
     </script>
     <script>
@@ -195,18 +195,33 @@
 
             $scope.publicationTargets = [];
 
-            //$scope.pages = true;
+            $scope.pages;
+            $scope.components;
+            $scope.categories;
+            $scope.templates;
 
-            $scope.filterPublicationTarget = function (pts) {
-                return function (pt) {
+            $scope.filteredPublishedItems = function (items) {
+                return function (item) {
                     for (var i in $scope.publicationTargets) {
-                        if (pt.publicationTarget == $scope.PublicationTarget[i].title && $scope.publicationTargets[i]) {
-                            return true;
+                        if ($scope.publicationTargets[i]) {
+                            selected = true;
+                            if ($scope.PublicationTarget[i].title == item.publicationTarget) {
+                                if (item.type == "Pages" && $scope.pages) {
+                                    return true;
+                                }
+                                if (item.type == "Component" && $scope.components) {
+                                    return true;
+                                }
+                                if (item.type == "Categories" && $scope.categories) {
+                                    return true;
+                                }
+                                if (item.type == "Component Templates" && $scope.templates) {
+                                    return true;
+                                }
+                            }
                         }
                     }
-                    //if (itemType.Type == "pages" && $scope.pages) {
-                    //    return true;
-                    //}
+
                 };
             };
         });
@@ -232,25 +247,25 @@
 
                 <label class="checkbox-container">
                     Pages
-				      <input type="checkbox" checked="checked">
+				      <input type="checkbox" checked="checked" ng-model ="pages">
                     <span class="checkmark"></span>
                 </label>
 
                 <label class="checkbox-container">
                     Components
-				      <input type="checkbox" checked="checked">
+				      <input type="checkbox" checked="checked" ng-model ="components">
                     <span class="checkmark"></span>
                 </label>
 
                 <label class="checkbox-container">
                     Categories
-				      <input type="checkbox">
+				      <input type="checkbox" checked="checked" ng-model ="categories">
                     <span class="checkmark"></span>
                 </label>
 
                 <label class="checkbox-container">
                     Templates
-				      <input type="checkbox">
+				      <input type="checkbox" checked="checked" ng-model ="templates">
                     <span class="checkmark"></span>
                 </label>
             </div>
@@ -341,7 +356,7 @@
 
             <div class="summary-grid">
                 <div class="row-eq-height-header align-middle">
-                    
+
                     <div class="col-xs-1">ID</div>
                     <div class="col-xs-2">Title</div>
                     <div class="col-xs-1">Item Type</div>
@@ -350,8 +365,8 @@
                     <div class="col-xs-2">Date</div>
                     <div class="col-xs-2">Action</div>
                 </div>
-                <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filterPublicationTarget(data)">
-                    
+                <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data)">
+
                     <div class="col-xs-1">{{data.id}}</div>
                     <div class="col-xs-2">{{data.title}}</div>
                     <div class="col-xs-1">{{data.type}}</div>
