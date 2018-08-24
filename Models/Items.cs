@@ -119,12 +119,12 @@ namespace PublishedSummary.Models
         /// Gets or sets the publication target.
         /// </summary>
         /// <value>The publication target.</value>
-        public List<string> PublicationTarget { get; set; }
+        public string PublicationTarget { get; set; }
         /// <summary>
         /// Gets or sets the user.
         /// </summary>
         /// <value>The user.</value>
-        public List<string> User { get; set; }
+        public string User { get; set; }
 
         /// <summary>
         /// Gets or sets the is published.
@@ -136,7 +136,7 @@ namespace PublishedSummary.Models
         /// Gets or sets the published at.
         /// </summary>
         /// <value>The published at.</value>
-        public List<DateTime> PublishedAt { get; set; }
+        public DateTime PublishedAt { get; set; }
     }
 
     /// <summary>

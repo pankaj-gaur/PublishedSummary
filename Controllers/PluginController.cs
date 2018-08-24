@@ -114,7 +114,7 @@ namespace PublishedSummary.Controllers
                 select multipleListItem.Item.Where(x => x.IsPublished == "true").ToList();
 
             IEnumerable<List<Item>> listItems = publishedItems.ToList();
-            
+            List<Item> finalList = new List<Item>();
             foreach (var publishedItem in listItems)
             {
                 foreach (var item in publishedItem)
@@ -126,15 +126,24 @@ namespace PublishedSummary.Controllers
                     foreach (var getPublishedInfo in getPublishedInfos)
                     {
                         if (getPublishedInfo == null) continue;
-                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
-                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
-                        item.User?.Add(getPublishedInfo.User.Title);
+                        Item tempItem = new Item();
+                        tempItem.ID = item.ID;
+                        tempItem.Title = item.Title;
+                        tempItem.PublicationTarget = getPublishedInfo.PublicationTarget.Title;
+                        tempItem.User = getPublishedInfo.User.Title;
+                        tempItem.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
+                        tempItem.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
+                        tempItem.PublishedAt = item.PublishedAt;
+                        finalList.Add(tempItem);
+                        //item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        //item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        //item.User?.Add(getPublishedInfo.User.Title);
                     }
 
                 }
 
             }
-            List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
+            //List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
 
             return finalList;
         }
@@ -171,7 +180,7 @@ namespace PublishedSummary.Controllers
                                  select multipleListItem.Item.Where(x => x.IsPublished == "true").ToList();
 
             IEnumerable<List<Item>> listItems = publishedItems.ToList();
-
+            List<Item> finalList = new List<Item>();
             foreach (var publishedItem in listItems)
             {
                 foreach (var item in publishedItem)
@@ -179,19 +188,27 @@ namespace PublishedSummary.Controllers
                     var publishInfo = Client.GetListPublishInfo(item.ID);
                     if (!publishInfo.Any()) continue;
                     IEnumerable<PublishInfoData> getPublishedInfos = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
-
                     foreach (var getPublishedInfo in getPublishedInfos)
                     {
                         if (getPublishedInfo == null) continue;
-                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
-                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
-                        item.User?.Add(getPublishedInfo.User.Title);
+                        Item tempItem = new Item();
+                        tempItem.ID = item.ID;
+                        tempItem.Title = item.Title;
+                        tempItem.PublicationTarget = getPublishedInfo.PublicationTarget.Title;
+                        tempItem.User = getPublishedInfo.User.Title;
+                        tempItem.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
+                        tempItem.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
+                        tempItem.PublishedAt = item.PublishedAt;
+                        finalList.Add(tempItem);
+                        //item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        //item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        //item.User?.Add(getPublishedInfo.User.Title);
                     }
 
                 }
 
             }
-            List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
+            //List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
             return finalList;
         }
         #endregion
@@ -226,6 +243,8 @@ namespace PublishedSummary.Controllers
 
             IEnumerable<List<Item>> listItems = publishedItems.ToList();
 
+            List<Item> finalList = new List<Item>();
+
             foreach (var publishedItem in listItems)
             {
                 foreach (var item in publishedItem)
@@ -233,21 +252,30 @@ namespace PublishedSummary.Controllers
                     var publishInfo = Client.GetListPublishInfo(item.ID);
                     if (!publishInfo.Any()) continue;
                     IEnumerable<PublishInfoData> getPublishedInfos = publishInfo.OrderByDescending(pubAt => pubAt.PublishedAt).GroupBy(pubTarget => pubTarget.PublicationTarget.Title).Select(pubTarget => pubTarget.FirstOrDefault());
-
                     foreach (var getPublishedInfo in getPublishedInfos)
                     {
                         if (getPublishedInfo == null) continue;
-                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
-                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
-                        item.User?.Add(getPublishedInfo.User.Title);
-                        item.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
-                        item.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
+                        Item tempItem = new Item();
+                        tempItem.ID = item.ID;
+                        tempItem.Title = item.Title;
+                        tempItem.PublicationTarget = getPublishedInfo.PublicationTarget.Title;
+                        tempItem.User = getPublishedInfo.User.Title;
+                        tempItem.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
+                        tempItem.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
+                        tempItem.PublishedAt = item.PublishedAt;
+                        finalList.Add(tempItem);
+
+                        //item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        //item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        //item.User?.Add(getPublishedInfo.User.Title);
+                        //item.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
+                        //item.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
                     }
 
                 }
 
             }
-            List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
+            //List<Item> finalList = listItems.SelectMany(publishedItem => publishedItem).ToList();
             return finalList;
         }
         #endregion
@@ -271,6 +299,7 @@ namespace PublishedSummary.Controllers
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(listXml.ToString());
             ListItems compList = TransformObjectAndXml.Deserialize<ListItems>(doc);
+            List<Item> finalList = new List<Item>(); 
             foreach (var item in compList.Item)
             {
                 var publishInfo = Client.GetListPublishInfo(item.ID);
@@ -279,17 +308,25 @@ namespace PublishedSummary.Controllers
                     var ff = publishInfo.OrderByDescending(y => y.PublishedAt).GroupBy(x => x.PublicationTarget.Title).Select(x => x.FirstOrDefault());
                     foreach (var data in ff)
                     {
-                        item.PublishedAt.Add(data.PublishedAt);
-                        item.PublicationTarget.Add(data.PublicationTarget.Title);
-                        item.User.Add(data.User.Title);
-                        
-                        item.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
+                        Item tempItem = new Item();
+                        tempItem.ID = item.ID;
+                        tempItem.Title = item.Title;
+                        tempItem.PublicationTarget = data.PublicationTarget.Title;
+                        tempItem.User = data.User.Title;
+                        tempItem.PublishedAt = data.PublishedAt;
+                        tempItem.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
+
+                        finalList.Add(tempItem);
+                        //item.PublishedAt.Add(data.PublishedAt);
+                        //item.PublicationTarget.Add(data.PublicationTarget.Title);
+                        //item.User.Add(data.User.Title);
+                        //item.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
                     }
                 }
 
-            } 
+            }
 
-            return compList.Item.Where(x => x.PublicationTarget.Count>0 && x.PublicationTarget.Contains("DXA Staging")).GroupBy(x => x.Type).Select(c => new { key = c.Key, total = c.Count() }).Where(x => x.key != null);
+            return finalList;//return compList.Item.Where(x => x.PublicationTarget.Count>0 && x.PublicationTarget.Contains("DXA Staging")).GroupBy(x => x.Type).Select(c => new { key = c.Key, total = c.Count() }).Where(x => x.key != null);
         }
         #endregion
 

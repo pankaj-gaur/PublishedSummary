@@ -48,9 +48,9 @@ namespace PublishedSummary.Helper
                     foreach (var getPublishedInfo in getPublishedInfos)
                     {
                         if (getPublishedInfo == null) continue;
-                        item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
-                        item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
-                        item.User?.Add(getPublishedInfo.User.Title);
+                        ////////item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
+                        ////////item.PublicationTarget?.Add(getPublishedInfo.PublicationTarget.Title);
+                        ////////item.User?.Add(getPublishedInfo.User.Title);
                         item.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
                         item.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
                     }
