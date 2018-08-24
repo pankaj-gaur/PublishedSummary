@@ -84,13 +84,14 @@
 }
 
 #pub-summary .summary-panel-details {
-    font-size: 12px;
+    font-size: 11px;
 	margin-right: 10px;
 	padding-right:10px;
     color: #867d79;
     float: left;
     height: 100%;
     margin-left: 3px;
+    margin-bottom:0px;
 }
 
 #pub-summary .clear-filter-link {
@@ -116,8 +117,18 @@
     overflow-y: scroll;
     max-height: 460px;
     margin-bottom: 15px;
+    margin-right:15px;
     border: 1px solid #867d79;
 }
+
+#pub-summary .summary-panel-header-grid {
+    overflow: auto;
+    max-height: 85px;
+    margin-bottom: 0px;
+}
+
+
+
 
 #pub-summary .summary-grid-header {
     background-color: #867d79;
@@ -178,11 +189,16 @@
   height: auto;
 }
 
-#pub-summary .row-eq-height-header {
+#pub-summary .row-summary-panel {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    height: auto;
+}
+
+
+#pub-summary .row-header {
     height: 30px;
     background-color: #867d79;
     font-weight: bold;
@@ -200,7 +216,6 @@
   border-bottom:solid 1px #CCCCCC;
   border-right:solid 1px #CCCCCC;
   padding-left:2px;
-  text-align:center;
 }
 
 #pub-summary .dark{

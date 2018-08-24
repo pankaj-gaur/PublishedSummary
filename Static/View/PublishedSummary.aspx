@@ -322,7 +322,7 @@
                 </div>
 
                 <div class="col-sm-9 top-left">
-                    <div class="col-sm-1 glyphicon glyphicon-chevron-left"></div>
+                    <!--<div class="col-sm-1 glyphicon glyphicon-chevron-left"></div>
                     <div class=" col-sm-9 summary-panel">
                         <div class="summary-panel-heading col-sm-2">Live</div>
                         <div class="summary-panel-details col-sm-3">
@@ -340,9 +340,56 @@
                         </div>
                     </div>
                     <div class="col-sm-1 glyphicon glyphicon-chevron-right"></div>
+                </div>-->
 
-
-                </div>
+                    <div class="summary-panel-header-grid">
+							<div class="row-summary-panel">
+								<div class="summary-panel-heading col-sm-2">Live</div>	
+								
+								<div class="summary-panel-details col-sm-4">
+									<div>Total:<b>57</b></div>
+									<div>Pages:<b>37</b></div>
+									<div>Components:<b>13</b></div>
+									<div>Categories:<b>7</b></div>
+								</div>
+							
+								<div class="summary-panel-heading col-sm-2">Staging</div>	
+								
+								<div class="summary-panel-details col-sm-4">
+									<div>Total:<b>57</b></div>
+									<div>Pages:<b>37</b></div>
+									<div>Components:<b>13</b></div>
+									<div>Categories:<b>7</b></div>
+								</div>
+								
+								<div class="summary-panel-heading col-sm-2">Acceptance</div>	
+								
+								<div class="summary-panel-details col-sm-4">
+									<div>Total:<b>57</b></div>
+									<div>Pages:<b>37</b></div>
+									<div>Components:<b>13</b></div>
+									<div>Categories:<b>7</b></div>
+								</div>
+								
+								<div class="summary-panel-heading col-sm-2">Prod</div>	
+								
+								<div class="summary-panel-details col-sm-4">
+									<div>Total:<b>57</b></div>
+									<div>Pages:<b>37</b></div>
+									<div>Components:<b>13</b></div>
+									<div>Categories:<b>7</b></div>
+								</div>
+								
+								<div class="summary-panel-heading col-sm-2">Prod</div>	
+								
+								<div class="summary-panel-details col-sm-4">
+									<div>Total:<b>57</b></div>
+									<div>Pages:<b>37</b></div>
+									<div>Components:<b>13</b></div>
+									<div>Categories:<b>7</b></div>
+								</div>
+							</div>
+						</div>
 
             </div>
             <!-- Summary Panel and Publication Dropdown -->
@@ -355,7 +402,7 @@
             <!-- Horizontal Row - Right Pane - Top -->
 
             <div class="summary-grid">
-                <div class="row-eq-height-header align-middle">
+                <div class="row-eq-height row-header align-middle">
 
                     <div class="col-xs-1">ID</div>
                     <div class="col-xs-2">Title</div>
@@ -372,7 +419,7 @@
                     <div class="col-xs-1">{{data.type}}</div>
                     <div class="col-xs-2">{{data.publicationTarget}}</div>
                     <div class="col-xs-2">{{data.user}}</div>
-                    <div class="col-xs-2">{{data.publishedAt | date:"dd/MM/yyyy"}}</div>
+                    <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
                     <div class="col-xs-2">
                         <a href="#" data-toggle="tooltip" title="Publish Item!">
                             <img class="action-icon" src="../img/publish.png" alt="Publish" /></a>
