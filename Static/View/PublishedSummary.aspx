@@ -129,29 +129,18 @@
                 var csvArray = [];
                 var csv = "";
                 var dom = $$(".row-eq-height div");
-                console.log("DOM: " + dom);
-                for (var index = 0; index < dom.length; index++) {
+               for (var index = 0; index < dom.length; index++) {
                     if ((index + 1) % 7 != 0) {
                         csv += dom[index].innerText + ",";
                     }
                     else {
-                        csvArray.push(csv.split(0, -1));
+                        csvArray.push(csv.slice(0, -1));
                         csv = "";
                     }
                 }
-                csvArray.push(csv.split(0, -1));
+                csvArray.push(csv.slice(0, -1));
 
                 console.log("csvArray JSON: " + JSON.stringify(csvArray));
-                /*$$(".row-eq-height div").each(function (index) {
-                    if ((index + 1) % 8 != 0) {
-                        csv += $(this).text() + ",";
-                    }
-                    else {
-                        csvArray.push(csv.split(0, -1));
-                        csv = "";
-                    }
-                })*/
-                //downloadJSON2CSV(JSON.stringify(csvArray));
                 downloadJSON2CSV(csvArray);
             });
 
@@ -270,38 +259,13 @@
                 </label>
             </div>
 
-            <div id="record-count-filters" class="filters">
-                <h2>Record Count</h2>
-
-                <label class="checkbox-container">
-                    All
-				      <input type="radio" name="radio">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="checkbox-container">
-                    Top 100
-				      <input type="radio" name="radio" checked="checked">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="checkbox-container">
-                    Top 1000
-				      <input type="radio" name="radio">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="checkbox-container">
-                    Top 5000
-				      <input type="radio" name="radio">
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-
             <div id="date-range-filters" class="filters">
                 <h2>Date Range</h2>
 
-                <label for="fromdate">From:</label>
+                <label for="fromdate" class="padding-top-5">From:</label>
                 <input type="date" name="fromdate" id="fromdate">
 
-                <label for="todate">To:</label>
+                <label for="todate" class="padding-top-5">To:</label>
                 <input type="date" name="todate" id="todate">
             </div>
         </div>
@@ -316,8 +280,7 @@
                         </select>
                     </div>
                     <div>
-                        Search: 
-                        <input type="text" placeholder="Search" ng-model="SearchText" />
+                        <input type="text" placeholder="Search" ng-model="SearchText" class="textbox" />
                     </div>
                 </div>
 
@@ -404,23 +367,23 @@
             <div class="summary-grid">
                 <div class="row-eq-height row-header align-middle">
 
-                    <div class="col-xs-1">ID</div>
+                    <div class="col-xs-2">ID</div>
                     <div class="col-xs-2">Title</div>
                     <div class="col-xs-1">Item Type</div>
                     <div class="col-xs-2">Target</div>
                     <div class="col-xs-2">By</div>
                     <div class="col-xs-2">Date</div>
-                    <div class="col-xs-2">Action</div>
+                    <div class="col-xs-1">Action</div>
                 </div>
                 <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data)">
 
-                    <div class="col-xs-1">{{data.id}}</div>
+                    <div class="col-xs-2">{{data.id}}</div>
                     <div class="col-xs-2">{{data.title}}</div>
                     <div class="col-xs-1">{{data.type}}</div>
                     <div class="col-xs-2">{{data.publicationTarget}}</div>
                     <div class="col-xs-2">{{data.user}}</div>
                     <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
-                    <div class="col-xs-2">
+                    <div class="col-xs-1">
                         <a href="#" data-toggle="tooltip" title="Publish Item!">
                             <img class="action-icon" src="../img/publish.png" alt="Publish" /></a>
                         <a href="#" class="action-icon" data-toggle="tooltip" title="Unpublish Item!">

@@ -15,6 +15,21 @@ select {
     background-image: none;
     font-family: Verdana;
 }
+
+#pub-summary .textbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background: #d0d0d0;
+    background-image: none;
+    font-family: Verdana;
+    height: 25px;
+    margin-top:10px;
+}
 /* Custom Select */
 #pub-summary .select {
     position: relative;

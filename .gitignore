@@ -40,3 +40,6 @@ bin/Debug/PublishedSummary.a4t
 .vs/MassImageUploader/v14/.suo
 .vs/MMDownload/v14/.suo
 PublishedSummary.csproj.user
+obj/Debug/PublishedSummary.csproj.CoreCompileInputs.cache
+obj/Debug/PublishedSummary.csproj.FileListAbsolute.txt
+obj/Debug/PublishedSummary.csprojAssemblyReference.cache
