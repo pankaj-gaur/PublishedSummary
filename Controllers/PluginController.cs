@@ -262,7 +262,7 @@ namespace PublishedSummary.Controllers
                         tempItem.User = getPublishedInfo.User.Title;
                         tempItem.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
                         tempItem.Type = item.Type == "64" ? "Pages" : item.Type == "512" ? "Categories" : item.Type == "32" ? "Component Templates" : item.Type == "16" ? "Component" : item.Type;
-                        tempItem.PublishedAt = item.PublishedAt;
+                        tempItem.PublishedAt = getPublishedInfo.PublishedAt;
                         finalList.Add(tempItem);
 
                         //item.PublishedAt?.Add(getPublishedInfo.PublishedAt);
