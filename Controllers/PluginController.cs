@@ -38,14 +38,12 @@ namespace PublishedSummary.Controllers
     [AlchemyRoutePrefix("Service")]
     public class PluginController : AlchemyApiController
     {
-
         #region  Get list of all publications
         /// <summary>
         /// Gets the publication list.
         /// </summary>
         /// <returns>List&lt;Publications&gt;.</returns>
-        [HttpGet]
-        [Route("GetPublicationList")]
+        [HttpGet,Route("GetPublicationList")]
         public List<Publications> GetPublicationList()
         {
             GetPublishedInfo getPublishedInfo = new GetPublishedInfo();
@@ -63,8 +61,7 @@ namespace PublishedSummary.Controllers
         /// Gets the publication target.
         /// </summary>
         /// <returns>System.Object.</returns>
-        [HttpGet]
-        [Route("GetPublicationTarget")]
+        [HttpGet,Route("GetPublicationTarget")]
         public object GetPublicationTarget()
         {
             var filter = new TargetTypesFilterData();
@@ -82,43 +79,46 @@ namespace PublishedSummary.Controllers
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException">listXml</exception>
         [HttpGet, Route("GetAllPublishedItems")]
-        public object GetAllPublishedItems()
+        public object GetAllPublishedItems(/*JObject tcmIDs*/)
         {
-            string[] tcmIds = { "tcm:0-14-1", "tcm:0-9-1" };
+           string[] demoids = { "tcm:0-14-1"};
             GetPublishedInfo getFinalPublishedInfo = new GetPublishedInfo();
             var multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
-            foreach (var tcmId in tcmIds)
+            //dynamic iDs = tcmIDs;
+            //var itemIDs = iDs.IDs;
+            foreach (var tcmId in demoids)
             {
-                TCM.TcmUri iTcmUri = new TCM.TcmUri(tcmId);
+                TCM.TcmUri iTcmUri = new TCM.TcmUri(tcmId.ToString());
                 XElement listXml = null;
                 switch (iTcmUri.ItemType.ToString())
                 {
-                    case "Publication":
-                        listXml = Client.GetListXml(tcmId, new RepositoryItemsFilterData
+                    case CONSTANTS.PUBLICATION:
+                        listXml = Client.GetListXml(tcmId.ToString(), new RepositoryItemsFilterData
                         {
-                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
-                            Recursive = true,
+                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },Recursive = true,
                             BaseColumns = ListBaseColumns.Extended
                         });
                         break;
-                    case "Folder":
-                        listXml = Client.GetListXml(tcmId, new OrganizationalItemItemsFilterData
+                    case CONSTANTS.FOLDER:
+                        listXml = Client.GetListXml(tcmId.ToString(), new OrganizationalItemItemsFilterData
                         {
-                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate },
+                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate },Recursive = true,BaseColumns = ListBaseColumns.Extended
+                        });
+                        break;
+                    case CONSTANTS.STRUCTUREGROUP:
+                        listXml = Client.GetListXml(tcmId.ToString(), new OrganizationalItemItemsFilterData()
+                        {
+                            ItemTypes = new[] { ItemType.Page },Recursive = true,BaseColumns = ListBaseColumns.Extended
+                        });
+                        break;
+                    case CONSTANTS.CATEGORY:
+                        listXml = Client.GetListXml(tcmId.ToString(), new RepositoryItemsFilterData
+                        {
+                            ItemTypes = new[] { ItemType.Category },
                             Recursive = true,
                             BaseColumns = ListBaseColumns.Extended
                         });
-                        break;
-                    case "StructureGroup":
-                        listXml = Client.GetListXml(tcmId, new OrganizationalItemItemsFilterData()
-                        {
-                            ItemTypes = new[] { ItemType.Page },
-                            Recursive = true,
-                            BaseColumns = ListBaseColumns.Extended
-                        });
-                        break;
-                    case "Category":
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -147,26 +147,20 @@ namespace PublishedSummary.Controllers
             {
                 var listXml = Client.GetListXml(tcmId, new RepositoryItemsFilterData
                 {
-                    ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
-                    Recursive = true,
-                    BaseColumns = ListBaseColumns.Extended
-                });
+                    ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },Recursive = true,
+                    BaseColumns = ListBaseColumns.Extended});
                 if (listXml == null) throw new ArgumentNullException(nameof(listXml));
                 doc.LoadXml(listXml.ToString());
                 multipleListItems.Add(TransformObjectAndXml.Deserialize<ListItems>(doc));
             }
             List<Item> finalList = new List<Item>();
             foreach (var publishedItem in getFinalPublishedInfo.FilterIsPublishedItem(multipleListItems))
+            foreach (var item in publishedItem)
             {
-                foreach (var item in publishedItem)
-                {
-                    var publishInfo = Client.GetListPublishInfo(item.ID);
-
-                    foreach (var item1 in getFinalPublishedInfo.ReturnFinalList(publishInfo, item)) finalList.Add(item1);
-                }
+                var publishInfo = Client.GetListPublishInfo(item.ID);
+                foreach (var item1 in getFinalPublishedInfo.ReturnFinalList(publishInfo, item)) finalList.Add(item1);
             }
-            IEnumerable<Analytics> analytics = finalList.GroupBy(x => new { x.PublicationTarget, x.Type })
-                  .Select(g => new Analytics { Count = g.Count(), PublicationTarget = g.Key.PublicationTarget, ItemType = g.Key.Type, });
+            IEnumerable<Analytics> analytics = finalList.GroupBy(x => new { x.PublicationTarget, x.Type }).Select(g => new Analytics { Count = g.Count(), PublicationTarget = g.Key.PublicationTarget, ItemType = g.Key.Type, });
             return analytics;
         }
         #endregion
@@ -177,10 +171,12 @@ namespace PublishedSummary.Controllers
         /// </summary>
         /// <returns>System.Object.</returns>
         [HttpGet, Route("GetItemPublishedHistory")]
-        public object GetItemPublishedHistory()
+        public object GetItemPublishedHistory(/*JObject IDs*/)
         {
+            //dynamic iDs = tcmIDs;
+            //var itemIDs = iDs.IDs;
             GetPublishedInfo publishedInfos = new GetPublishedInfo();
-            return publishedInfos.GetPublishedHistory(Client.GetListPublishInfo("tcm:14-495-64")); ;
+            return publishedInfos.GetPublishedHistory(Client.GetListPublishInfo("tcm:14-495-64"));
         }
         #endregion
 

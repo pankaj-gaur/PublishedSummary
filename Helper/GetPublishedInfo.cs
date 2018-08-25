@@ -33,19 +33,10 @@ namespace PublishedSummary.Helper
         /// </summary>
         /// <param name="publishInfoData">The publish information data.</param>
         /// <returns>ItemPublishedHistory.</returns>
-        public ItemPublishedHistory GetPublishedHistory(PublishInfoData[] publishInfoData)
+        public List<ItemPublishedHistory> GetPublishedHistory(PublishInfoData[] publishInfoData)
         {
-            var publishedHistory = new ItemPublishedHistory();
-            foreach (var publishInfo in publishInfoData.OrderBy(x => x.PublishedAt))
-            {
-                publishedHistory.ItemPublicationTarget.Add(publishInfo.PublicationTarget.Title);
-                publishedHistory.ItemPublishedAt.Add(publishInfo.PublishedAt);
-                publishedHistory.UserList.Add(publishInfo.User.Title);
-            }
-            return publishedHistory;
+            return publishInfoData.OrderBy(x => x.PublishedAt).Select(publishInfo => new ItemPublishedHistory {ItemPublicationTarget = publishInfo.PublicationTarget.Title, ItemPublishedAt = publishInfo.PublishedAt, UserList = publishInfo.User.Title}).ToList();
         }
-
-
         /// <summary>
         /// Returns the final list.
         /// </summary>
@@ -55,7 +46,7 @@ namespace PublishedSummary.Helper
         public List<Item> ReturnFinalList(PublishInfoData[] publishInfoData, Item item)
         {
             var finalList = new List<Item>();
-            var tempItem = new Item();
+            
             IEnumerable<PublishInfoData> getPublishedInfos = null;
             if (publishInfoData.Any())
                 getPublishedInfos = publishInfoData.OrderByDescending(pubAt => pubAt.PublishedAt)
@@ -65,6 +56,7 @@ namespace PublishedSummary.Helper
             if (getPublishedInfos == null) return finalList;
             foreach (var getPublishedInfo in getPublishedInfos)
             {
+                var tempItem = new Item();
                 if (getPublishedInfo == null) continue;
                 FinalPublishedItemList(item, finalList, tempItem, getPublishedInfo);
             }

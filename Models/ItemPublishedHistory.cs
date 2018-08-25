@@ -25,27 +25,17 @@ namespace PublishedSummary.Models
         /// Gets or sets the item publication target.
         /// </summary>
         /// <value>The item publication target.</value>
-        public List<string> ItemPublicationTarget { get; set; }
+        public string ItemPublicationTarget { get; set; }
         /// <summary>
         /// Gets or sets the item published at.
         /// </summary>
         /// <value>The item published at.</value>
-        public List<DateTime> ItemPublishedAt { get; set; }
+        public DateTime ItemPublishedAt { get; set; }
         /// <summary>
         /// Gets or sets the user list.
         /// </summary>
         /// <value>The user list.</value>
-        public List<string> UserList { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ItemPublishedHistory"/> class.
-        /// </summary>
-        public ItemPublishedHistory()
-        {
-            ItemPublicationTarget = new List<string>();
-            ItemPublishedAt = new List<DateTime>();
-            UserList = new List<string>();
-        }
-
+        public string UserList { get; set; }
+        
     }
 }
