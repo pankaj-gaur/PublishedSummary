@@ -71,6 +71,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tridion.Common">
+      <HintPath>References\Tridion.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Tridion.ContentManager">
+      <HintPath>References\Tridion.ContentManager.dll</HintPath>
+    </Reference>
     <Reference Include="Tridion.ContentManager.CoreService.Client, Version=7.1.0.1290, Culture=neutral, PublicKeyToken=ddfc895746e5ee6b, processorArchitecture=MSIL">
       <HintPath>packages\Alchemy4Tridion.Plugin.1.0.9\lib\net40\Tridion.ContentManager.CoreService.Client.dll</HintPath>
       <Private>True</Private>
@@ -78,9 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GUI\PublishedSummaryResourceGroup.cs" />
+    <Compile Include="Helper\CONSTANTS.cs" />
     <Compile Include="Helper\GetPublishedInfo.cs" />
     <Compile Include="Helper\PageURL.cs" />
     <Compile Include="Helper\Transform.cs" />
+    <Compile Include="Models\Analytics.cs" />
+    <Compile Include="Models\ItemPublishedHistory.cs" />
     <Compile Include="Models\Items.cs" />
     <Compile Include="Models\Publications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,7 +117,9 @@
     <Content Include="Static\Styles\custom-control.css" />
     <Content Include="Static\Styles\published-summary.css" />
     <Content Include="Static\Styles\Styles.css" />
-    <Content Include="Static\View\PublishedSummary.aspx" />
+    <Content Include="Static\View\PublishedSummary.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
