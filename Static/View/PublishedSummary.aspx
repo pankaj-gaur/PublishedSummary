@@ -14,29 +14,12 @@
 </head>
 <body>
     <script>
+        
         $(document).ready(function () {
 
-            $.ajax({
-                type: "POST",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPagesInsideSG",
-                data: "{'IDs':['tcm:14-65-4']}",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                },
-                failure: function (response) {
-                },
-                error: function (response) {
-                }
-            });
-
-        });
-
-        $(document).ready(function () {
             $.ajax({
                 type: "GET",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetComponents",
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetItemPublishedHistory",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
