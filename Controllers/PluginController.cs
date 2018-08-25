@@ -23,7 +23,7 @@ using Newtonsoft.Json.Linq;
 using PublishedSummary.Models;
 using System.Linq;
 using System;
-using TCM=Tridion.ContentManager;
+using TCM = Tridion.ContentManager;
 namespace PublishedSummary.Controllers
 {
     /// <summary>
@@ -38,7 +38,7 @@ namespace PublishedSummary.Controllers
     [AlchemyRoutePrefix("Service")]
     public class PluginController : AlchemyApiController
     {
-        
+
         #region  Get list of all publications
         /// <summary>
         /// Gets the publication list.
@@ -66,7 +66,7 @@ namespace PublishedSummary.Controllers
         [HttpGet]
         [Route("GetPublicationTarget")]
         public object GetPublicationTarget()
-        {            
+        {
             var filter = new TargetTypesFilterData();
             var allPublicationTargets = Client.GetSystemWideList(filter);
             if (allPublicationTargets == null) throw new ArgumentNullException(nameof(allPublicationTargets));
@@ -127,10 +127,7 @@ namespace PublishedSummary.Controllers
                 doc.LoadXml(listXml.ToString());
                 multipleListItems.Add(TransformObjectAndXml.Deserialize<ListItems>(doc));
             }
-            return getFinalPublishedInfo.FilterIsPublishedItem(multipleListItems)
-                .SelectMany(publishedItem => publishedItem, (publishedItem, item) => new {publishedItem, item})
-                .Select(@t => new {@t, publishInfo = Client.GetListPublishInfo(@t.item.ID)})
-                .SelectMany(@t => getFinalPublishedInfo.ReturnFinalList(@t.publishInfo, @t.@t.item)).ToList();
+            return getFinalPublishedInfo.FilterIsPublishedItem(multipleListItems).SelectMany(publishedItem => publishedItem, (publishedItem, item) => new { publishedItem, item }).Select(@t => new { @t, publishInfo = Client.GetListPublishInfo(@t.item.ID) }).SelectMany(@t => getFinalPublishedInfo.ReturnFinalList(@t.publishInfo, @t.@t.item)).ToList();
         }
         #endregion
 
@@ -142,33 +139,35 @@ namespace PublishedSummary.Controllers
         [HttpGet, Route("GetAnalyticData")]
         public object GetAnalyticData()
         {
-            var listXml = Client.GetListXml("tcm:0-14-1", new RepositoryItemsFilterData
-            {
-                ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
-                Recursive = true,
-                BaseColumns = ListBaseColumns.Default
-            });
+            string[] tcmIds = { "tcm:0-14-1"};
+            GetPublishedInfo getFinalPublishedInfo = new GetPublishedInfo();
+            var multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(listXml.ToString());
-            ListItems compList = TransformObjectAndXml.Deserialize<ListItems>(doc);
-            foreach (var item in compList.Item)
+            foreach (var tcmId in tcmIds)
             {
-                var publishInfo = Client.GetListPublishInfo(item.ID);
-                if (publishInfo.Any())
+                var listXml = Client.GetListXml(tcmId, new RepositoryItemsFilterData
                 {
-                    var lastPublishedDetails = publishInfo.OrderByDescending(pi => pi.PublishedAt).First();
-                    item.PublicationTarget = lastPublishedDetails.PublicationTarget.Title;
-                    item.User = lastPublishedDetails.User.Title;
-                    item.Type = item.Type == "64" ? Enum.GetName(typeof(ItemType), 64) :
-                        item.Type == "512" ? Enum.GetName(typeof(ItemType), 512) :
-                        item.Type == "32" ? Enum.GetName(typeof(ItemType), 32) :
-                        item.Type == "16" ? Enum.GetName(typeof(ItemType), 16) : item.Type;
-                }
-
+                    ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
+                    Recursive = true,
+                    BaseColumns = ListBaseColumns.Extended
+                });
+                if (listXml == null) throw new ArgumentNullException(nameof(listXml));
+                doc.LoadXml(listXml.ToString());
+                multipleListItems.Add(TransformObjectAndXml.Deserialize<ListItems>(doc));
             }
+            List<Item> finalList = new List<Item>();
+            foreach (var publishedItem in getFinalPublishedInfo.FilterIsPublishedItem(multipleListItems))
+            {
+                foreach (var item in publishedItem)
+                {
+                    var publishInfo = Client.GetListPublishInfo(item.ID);
 
-            return compList.Item.Where(x => x.PublicationTarget != null && x.PublicationTarget == "DXA Staging")
-                .GroupBy(x => x.Type).Select(c => new { key = c.Key, total = c.Count() }).Where(x => x.key != null);
+                    foreach (var item1 in getFinalPublishedInfo.ReturnFinalList(publishInfo, item)) finalList.Add(item1);
+                }
+            }
+            IEnumerable<Analytics> analytics = finalList.GroupBy(x => new { x.PublicationTarget, x.Type })
+                  .Select(g => new Analytics { Count = g.Count(), PublicationTarget = g.Key.PublicationTarget, ItemType = g.Key.Type, });
+            return analytics;
         }
         #endregion
 
@@ -181,9 +180,7 @@ namespace PublishedSummary.Controllers
         public object GetItemPublishedHistory()
         {
             GetPublishedInfo publishedInfos = new GetPublishedInfo();
-            var publishInfos = Client.GetListPublishInfo("tcm:14-495-64");
-            var itemPublishedHistory = publishedInfos.GetPublishedHistory(publishInfos);
-            return itemPublishedHistory;
+            return publishedInfos.GetPublishedHistory(Client.GetListPublishInfo("tcm:14-495-64")); ;
         }
         #endregion
 

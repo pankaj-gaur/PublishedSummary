@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using Alchemy4Tridion.Plugins;
 using PublishedSummary.Models;
 using System.Linq;
 using System.Xml;
@@ -27,8 +26,7 @@ namespace PublishedSummary.Helper
     /// <summary>
     /// Class GetPublishedInfo.
     /// </summary>
-    /// <seealso cref="Alchemy4Tridion.Plugins.AlchemyApiController" />
-    public class GetPublishedInfo : AlchemyApiController
+    public class GetPublishedInfo
     {
         /// <summary>
         /// Gets the published information list.
