@@ -201,16 +201,19 @@
 
 #pub-summary .row-header {
     height: 30px;
+    padding-top:6px;
+
     background-color: #867d79;
     font-weight: bold;
-    color:#fff;
+    color: #fff;
+    text-align: center;
 }
 
 #pub-summary .col-xs-1 {
     border-bottom: solid 1px #CCCCCC;
     border-right: solid 1px #CCCCCC;
     padding-left: 2px;
-    text-align: center;
+    
 }
 
 #pub-summary .col-xs-2{
@@ -234,19 +237,23 @@
 .action-icon {
     height: 16px;
     width: 16px;
-    margin: 8px;
+    margin-top: 8px;
     background-image: url(/WebUI/Editors/Base/Themes/Carbon2/Sprites/base_Sprites.16px_v8.5.0.22656.907_.png);
     cursor: pointer;
 }
 
 .publish-icon {
-    background-position: 0 -800px
+    background-position: 0 -800px;
 }
 
 .unpublish-icon {
-    background-position: 0 -816px
+    background-position: 0 -816px;
 }
 
 .open-icon {
-    background-position: 0 -48px
+    background-position: 0 -48px;
+}
+
+.history-icon {
+    background-position: 0 -288px;
 }

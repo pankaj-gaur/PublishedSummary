@@ -223,6 +223,7 @@ alchmyApp.controller('alchmyController', function ($scope, $http) {
                             <img class="action-icon unpublish-icon" src="#"/></a>
                         <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
                             <img class="action-icon open-icon" src="#"/></a>
+                        
                     </div>
                 </div>
             </div> <!-- Summary Grid -->
