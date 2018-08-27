@@ -11,10 +11,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
-    
+
     <script type="text/javascript" src="../js/PublishedSummary.js"></script>
 
- <script>
+    <script>
         alchmyApp = angular.module('alchmyApp', []);
         alchmyApp.controller('alchmyController', function ($scope, $http) {
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
@@ -40,6 +40,10 @@
 
             $scope.fromDate = null;
             $scope.toDate = null;
+
+            $scope.orderByField = 'id';
+            $scope.reverseSort = false;
+
 
             $scope.filteredPublishedItems = function (items) {
                 return function (item) {
@@ -79,7 +83,7 @@
                         }
                     }
                 }
-                if(!returned) {
+                if (!returned) {
                     return true;
                 }
             };
@@ -111,25 +115,25 @@
 
                 <label class="checkbox-container">
                     Pages
-				      <input type="checkbox" checked="checked" ng-model ="pages">
+				      <input type="checkbox" checked="checked" ng-model="pages">
                     <span class="checkmark"></span>
                 </label>
 
                 <label class="checkbox-container">
                     Components
-				      <input type="checkbox" checked="checked" ng-model ="components">
+				      <input type="checkbox" checked="checked" ng-model="components">
                     <span class="checkmark"></span>
                 </label>
 
                 <label class="checkbox-container">
                     Categories
-				      <input type="checkbox" checked="checked" ng-model ="categories">
+				      <input type="checkbox" checked="checked" ng-model="categories">
                     <span class="checkmark"></span>
                 </label>
 
                 <label class="checkbox-container">
                     Templates
-				      <input type="checkbox" checked="checked" ng-model ="templates">
+				      <input type="checkbox" checked="checked" ng-model="templates">
                     <span class="checkmark"></span>
                 </label>
             </div>
@@ -143,7 +147,8 @@
                 <label for="todate" class="padding-top-5">To:</label>
                 <input type="date" name="todate" id="todate" ng-model="toDate">
             </div>
-        </div> <!-- Left Side Panel -->
+        </div>
+        <!-- Left Side Panel -->
 
         <div class="col-sm-9 flex-item">
             <div class="row">
@@ -160,106 +165,119 @@
 
                 <div class="col-sm-9 top-left">
                     <div class="summary-panel-header-grid">
-							<div class="row-summary-panel">
-								<div class="summary-panel-heading col-sm-2">Live</div>	
-								
-								<div class="summary-panel-details col-sm-4">
-									<div>Total:<b>57</b></div>
-									<div>Pages:<b>37</b></div>
-									<div>Components:<b>13</b></div>
-									<div>Categories:<b>7</b></div>
-								</div>
-							
-								<div class="summary-panel-heading col-sm-2">Staging</div>	
-								
-								<div class="summary-panel-details col-sm-4">
-									<div>Total:<b>57</b></div>
-									<div>Pages:<b>37</b></div>
-									<div>Components:<b>13</b></div>
-									<div>Categories:<b>7</b></div>
-								</div>
-								
-								<div class="summary-panel-heading col-sm-2">Acceptance</div>	
-								
-								<div class="summary-panel-details col-sm-4">
-									<div>Total:<b>57</b></div>
-									<div>Pages:<b>37</b></div>
-									<div>Components:<b>13</b></div>
-									<div>Categories:<b>7</b></div>
-								</div>
-								
-								<div class="summary-panel-heading col-sm-2">Prod</div>	
-								
-								<div class="summary-panel-details col-sm-4">
-									<div>Total:<b>57</b></div>
-									<div>Pages:<b>37</b></div>
-									<div>Components:<b>13</b></div>
-									<div>Categories:<b>7</b></div>
-								</div>
-								
-								<div class="summary-panel-heading col-sm-2">Prod</div>	
-								
-								<div class="summary-panel-details col-sm-4">
-									<div>Total:<b>57</b></div>
-									<div>Pages:<b>37</b></div>
-									<div>Components:<b>13</b></div>
-									<div>Categories:<b>7</b></div>
-								</div>
-							</div>
-						</div>
+                        <div class="row-summary-panel">
+                            <div class="summary-panel-heading col-sm-2">Live</div>
 
-            </div>
-            <!-- Summary Panel and Publication Dropdown -->
+                            <div class="summary-panel-details col-sm-4">
+                                <div>Total:<b>57</b></div>
+                                <div>Pages:<b>37</b></div>
+                                <div>Components:<b>13</b></div>
+                                <div>Categories:<b>7</b></div>
+                            </div>
 
-            <div class="row">
-                <div class="col-sm-12 padding-left-5">
-                    <hr>
+                            <div class="summary-panel-heading col-sm-2">Staging</div>
+
+                            <div class="summary-panel-details col-sm-4">
+                                <div>Total:<b>57</b></div>
+                                <div>Pages:<b>37</b></div>
+                                <div>Components:<b>13</b></div>
+                                <div>Categories:<b>7</b></div>
+                            </div>
+
+                            <div class="summary-panel-heading col-sm-2">Acceptance</div>
+
+                            <div class="summary-panel-details col-sm-4">
+                                <div>Total:<b>57</b></div>
+                                <div>Pages:<b>37</b></div>
+                                <div>Components:<b>13</b></div>
+                                <div>Categories:<b>7</b></div>
+                            </div>
+
+                            <div class="summary-panel-heading col-sm-2">Prod</div>
+
+                            <div class="summary-panel-details col-sm-4">
+                                <div>Total:<b>57</b></div>
+                                <div>Pages:<b>37</b></div>
+                                <div>Components:<b>13</b></div>
+                                <div>Categories:<b>7</b></div>
+                            </div>
+
+                            <div class="summary-panel-heading col-sm-2">Prod</div>
+
+                            <div class="summary-panel-details col-sm-4">
+                                <div>Total:<b>57</b></div>
+                                <div>Pages:<b>37</b></div>
+                                <div>Components:<b>13</b></div>
+                                <div>Categories:<b>7</b></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-            <!-- Horizontal Row - Right Pane - Top -->
+                <!-- Summary Panel and Publication Dropdown -->
 
-            <div class="summary-grid">
-                <div class="row-eq-height row-header align-middle">
-
-                    <div class="col-xs-2">ID</div>
-                    <div class="col-xs-2">Title</div>
-                    <div class="col-xs-2">Item Type</div>
-                    <div class="col-xs-1">Target</div>
-                    <div class="col-xs-2">By</div>
-                    <div class="col-xs-2">Date</div>
-                    <div class="col-xs-1">Action</div>
-                </div>
-                <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data)">
-
-                    <div class="col-xs-2">{{data.id}}</div>
-                    <div class="col-xs-2">{{data.title}}</div>
-                    <div class="col-xs-2">{{data.type}}</div>
-                    <div class="col-xs-1">{{data.publicationTarget}}</div>
-                    <div class="col-xs-2">{{data.user}}</div>
-                    <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
-                    <div class="col-xs-1">
-                        <a href="#" data-toggle="tooltip" title="Publish Item!">
-                            <img class="action-icon publish-icon" src="#" /></a>
-                        <a href="#" data-toggle="tooltip" title="Unpublish Item!">
-                            <img class="action-icon unpublish-icon" src="#"/></a>
-                        <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
-                            <img class="action-icon open-icon" src="#"/></a>
-                        
+                <div class="row">
+                    <div class="col-sm-12 padding-left-5">
+                        <hr>
                     </div>
                 </div>
-            </div> <!-- Summary Grid -->
+                <!-- Horizontal Row - Right Pane - Top -->
 
-            <div class="col-sm-12 actions padding-left-5">
-                <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
-                <button class="col-sm-2 button">Publish Selected</button>
-                <button class="col-sm-2 button">Unpublish Selected</button>
-                <button class="col-sm-3 button">Sync Publishing with Live</button>
-                <button class="col-sm-2 button">Show Delta</button>
-            </div> <!-- CTA -->
+                <div class="summary-grid">
+                    <div class="row-eq-height row-header align-middle">
+                        <div class="col-xs-2" ng-click="orderByField='id'; reverseSort = !reverseSort">
+                            ID <span ng-show="orderByField == 'id'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                        </div>
+                        <div class="col-xs-2" ng-click="orderByField='title'; reverseSort = !reverseSort">
+                            Title <span ng-show="orderByField == 'title'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                        </div>
+                        <div class="col-xs-2" ng-click="orderByField='type'; reverseSort = !reverseSort">
+                            Type <span ng-show="orderByField == 'type'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                        </div>
+                        <div class="col-xs-1" ng-click="orderByField='publicationTarget'; reverseSort = !reverseSort">
+                            Target <span ng-show="orderByField == 'publicationTarget'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                        </div>
+                        <div class="col-xs-2" ng-click="orderByField='user'; reverseSort = !reverseSort">
+                            By <span ng-show="orderByField == 'user'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                        </div>
+                        <div class="col-xs-2" ng-click="orderByField='publishedAt'; reverseSort = !reverseSort">
+                            Date <span ng-show="orderByField == 'publishedAt'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                        </div>
+                        <div class="col-xs-1">Action</div>
+                    </div>
+                    <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data) | orderBy:orderByField:reverseSort">
 
-        </div> <!-- Right Side Panel -->
-    </div>
+                        <div class="col-xs-2">{{data.id}}</div>
+                        <div class="col-xs-2">{{data.title}}</div>
+                        <div class="col-xs-2">{{data.type}}</div>
+                        <div class="col-xs-1">{{data.publicationTarget}}</div>
+                        <div class="col-xs-2">{{data.user}}</div>
+                        <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
+                        <div class="col-xs-1">
+                            <a href="#" data-toggle="tooltip" title="Publish Item!">
+                                <img class="action-icon publish-icon" src="#" /></a>
+                            <a href="#" data-toggle="tooltip" title="Unpublish Item!">
+                                <img class="action-icon unpublish-icon" src="#" /></a>
+                            <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
+                                <img class="action-icon open-icon" src="#" /></a>
 
+                        </div>
+                    </div>
+                </div>
+                <!-- Summary Grid -->
+
+                <div class="col-sm-12 actions padding-left-5">
+                    <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
+                    <button class="col-sm-2 button">Publish Selected</button>
+                    <button class="col-sm-2 button">Unpublish Selected</button>
+                    <button class="col-sm-3 button">Sync Publishing with Live</button>
+                    <button class="col-sm-2 button">Show Delta</button>
+                </div>
+                <!-- CTA -->
+
+            </div>
+            <!-- Right Side Panel -->
+        </div>
     </div>
     <!--<script type="text/javascript">var removeSdlWebLoadInterval = setInterval(function () { if (!window.$display) { return; } clearInterval(removeSdlWebLoadInterval); if ($display && !$display.getView()) { if (window._activityIndicatorControl) { window._activityIndicatorControl.dispose(); window._activityIndicatorControl = null; } var sdlWebLoadingIndicator = $('style#loadingIndicator'); if (sdlWebLoadingIndicator) { $dom.removeNode(sdlWebLoadingIndicator); } } }, 500);</script>-->
 </body>
