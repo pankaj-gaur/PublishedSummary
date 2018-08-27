@@ -14,55 +14,76 @@
     
     <script type="text/javascript" src="../js/PublishedSummary.js"></script>
 
-    <script>
+ <script>
         alchmyApp = angular.module('alchmyApp', []);
-alchmyApp.controller('alchmyController', function ($scope, $http) {
-    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
-        $scope.PublicationTarget = response;
-    });
-    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems").success(function (response) {
-        $scope.PublishedItems = response;
-    });
-    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
-        $scope.PublicationList = response;
-    });
+        alchmyApp.controller('alchmyController', function ($scope, $http) {
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
+                $scope.PublicationTarget = response;
+            });
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems").success(function (response) {
+                $scope.PublishedItems = response;
+            });
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
+                $scope.PublicationList = response;
+            });
 
-    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAnalyticData").success(function (response) {
-        $scope.AnalyticData = response;
-    });
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAnalyticData").success(function (response) {
+                $scope.AnalyticData = response;
+            });
 
-    $scope.publicationTargets = [];
+            $scope.publicationTargets = [];
 
-    $scope.pages = true;
-    $scope.components = true;
-    $scope.categories = true;
-    $scope.templates = true;
+            $scope.pages = true;
+            $scope.components = true;
+            $scope.categories = true;
+            $scope.templates = true;
 
-    $scope.filteredPublishedItems = function (items) {
-        return function (item) {
-            for (var i in $scope.publicationTargets) {
-                if ($scope.publicationTargets[i]) {
-                    selected = true;
-                    if ($scope.PublicationTarget[i].title == item.publicationTarget) {
-                        if (item.type == "Page" && $scope.pages) {
-                            return true;
+            $scope.fromDate = null;
+            $scope.toDate = null;
+
+            $scope.filteredPublishedItems = function (items) {
+                return function (item) {
+                    for (var i in $scope.publicationTargets) {
+                        if ($scope.publicationTargets[i]) {
+                            selected = true;
+                            if ($scope.PublicationTarget[i].title == item.publicationTarget) {
+                                if (item.type == "Page" && $scope.pages) {
+                                    return filteredDate(item);
+                                }
+                                if (item.type == "Component" && $scope.components) {
+                                    return filteredDate(item);
+                                }
+                                if (item.type == "Category" && $scope.categories) {
+                                    return filteredDate(item);
+                                }
+                                if (item.type == "ComponentTemplate" && $scope.templates) {
+                                    return filteredDate(item);
+                                }
+
+                            }
                         }
-                        if (item.type == "Component" && $scope.components) {
-                            return true;
-                        }
-                        if (item.type == "Category" && $scope.categories) {
-                            return true;
-                        }
-                        if (item.type == "ComponentTemplate" && $scope.templates) {
+                    }
+
+                };
+            };
+            var filteredDate = function (item) {
+                var returned = false;
+                if ($scope.fromDate != null && $scope.toDate != null) {
+                    if ($scope.toDate != "" && $scope.fromDate != "") {
+                        returned = true;
+                        var publishDate = new Date(item.publishedAt);
+                        var fromDate = new Date($scope.fromDate);
+                        var toDate = new Date($scope.toDate);
+                        if (publishDate > fromDate && publishDate < toDate) {
                             return true;
                         }
                     }
                 }
-            }
-
-        };
-    };
-});
+                if(!returned) {
+                    return true;
+                }
+            };
+        });
 
     </script>
 
@@ -117,10 +138,10 @@ alchmyApp.controller('alchmyController', function ($scope, $http) {
                 <h2>Date Range</h2>
 
                 <label for="fromdate" class="padding-top-5">From:</label>
-                <input type="date" name="fromdate" id="fromdate">
+                <input type="date" name="fromdate" id="fromdate" ng-model="fromDate">
 
                 <label for="todate" class="padding-top-5">To:</label>
-                <input type="date" name="todate" id="todate">
+                <input type="date" name="todate" id="todate" ng-model="toDate">
             </div>
         </div> <!-- Left Side Panel -->
 
