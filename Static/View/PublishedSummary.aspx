@@ -11,194 +11,65 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
-</head>
-<body>
-    <script>
-        
-        $(document).ready(function () {
+    
+    <script type="text/javascript" src="../js/PublishedSummary.js"></script>
 
-            $.ajax({
-                type: "GET",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetItemPublishedHistory",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                },
-                failure: function (response) {
-                },
-                error: function (response) {
-                }
-            });
-
-        });
-
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAnalyticData",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                    StateCityChart(response);
-                },
-                failure: function (response) {
-
-                },
-                error: function (response) {
-
-                }
-            });
-
-        });
-
-        function initialize() {
-            $('.callChart').live('click', function () {
-                drawChart();
-            });
-        };
-        function StateCityChart(response) {
-            var dataArray = response;
-            var queryObject = "";
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Key');
-            data.addColumn('number', 'Count');
-            $.each(response, function (i, response) {
-                var value = response.total;
-                var name = response.key;
-                data.addRows([[name, value]]);
-            });
-
-            //var data = new google.visualization.arrayToDataTable(dataArray);
-            var Graphtitle;
-
-            Graphtitle = "Analytics  ByYear";
-
-
-
-            var options = {
-                title: Graphtitle,
-                is3D: true,
-                animation: {
-                    duration: 3000,
-                    easing: 'out',
-                    startup: true
-                },
-                colorAxis: { colors: ['#54C492', '#cc0000'] },
-                datalessRegionColor: '#dedede',
-                defaultColor: '#dedede',
-                vAxis: { title: "Vertical Axis Title" }, //Bar of Pie Charts
-                hAxis: { title: "Horizontal Axis Title " }, //Bar of Pie Charts
-            };
-            var chart;
-
-            chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-            chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-            chart.draw(data, options);
-            chart = new google.visualization.BarChart(document.getElementById('bar_div'));
-            chart.draw(data, options);
-
-            return false;
-        };
-
-        google.load("visualization", "1", { packages: ["corechart"] });
-        google.setOnLoadCallback(initialize);
-
-
-        $(document).ready(function () {
-            $("#btn_export").click(function () {
-                var csvArray = [];
-                var csv = "";
-                var dom = $$(".row-eq-height div");
-               for (var index = 0; index < dom.length; index++) {
-                    if ((index + 1) % 7 != 0) {
-                        csv += dom[index].innerText + ",";
-                    }
-                    else {
-                        csvArray.push(csv.slice(0, -1));
-                        csv = "";
-                    }
-                }
-                csvArray.push(csv.slice(0, -1));
-
-                console.log("csvArray JSON: " + JSON.stringify(csvArray));
-                downloadJSON2CSV(csvArray);
-            });
-
-            function downloadJSON2CSV(objArray) {
-                //var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-                var array = objArray;
-                console.log("Array Passed: " + array);
-                var str = '';
-                console.log("Array Length: " + array.length);
-                for (var i = 0; i < array.length; i++) {
-                    str += array[i] + '\r\n';
-                }
-
-                console.log("str: " + str);
-
-                if (navigator.appName != 'Microsoft Internet Explorer') {
-                    window.open('data:text/csv;charset=utf-8,' + escape(str));
-                }
-                else {
-                    var popup = window.open('', 'csv', '');
-                    popup.document.body.innerHTML = '<pre>' + str + '</pre>';
-                }
-            };
-        });
-
-
-
-    </script>
     <script>
         alchmyApp = angular.module('alchmyApp', []);
-        alchmyApp.controller('alchmyController', function ($scope, $http) {
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
-                $scope.PublicationTarget = response;
-            });
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems").success(function (response) {
-                $scope.PublishedItems = response;
-            });
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
-                $scope.PublicationList = response;
-            });
+alchmyApp.controller('alchmyController', function ($scope, $http) {
+    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
+        $scope.PublicationTarget = response;
+    });
+    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems").success(function (response) {
+        $scope.PublishedItems = response;
+    });
+    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
+        $scope.PublicationList = response;
+    });
 
-            $scope.publicationTargets = [];
+    $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAnalyticData").success(function (response) {
+        $scope.AnalyticData = response;
+    });
 
-            $scope.pages = true;
-            $scope.components = true;
-            $scope.categories =true ;
-            $scope.templates=true;
+    $scope.publicationTargets = [];
 
-            $scope.filteredPublishedItems = function (items) {
-                return function (item) {
-                    for (var i in $scope.publicationTargets) {
-                        if ($scope.publicationTargets[i]) {
-                            selected = true;
-                            if ($scope.PublicationTarget[i].title == item.publicationTarget) {
-                                if (item.type == "Pages" && $scope.pages) {
-                                    return true;
-                                }
-                                if (item.type == "Component" && $scope.components) {
-                                    return true;
-                                }
-                                if (item.type == "Categories" && $scope.categories) {
-                                    return true;
-                                }
-                                if (item.type == "Component Templates" && $scope.templates) {
-                                    return true;
-                                }
-                            }
+    $scope.pages = true;
+    $scope.components = true;
+    $scope.categories = true;
+    $scope.templates = true;
+
+    $scope.filteredPublishedItems = function (items) {
+        return function (item) {
+            for (var i in $scope.publicationTargets) {
+                if ($scope.publicationTargets[i]) {
+                    selected = true;
+                    if ($scope.PublicationTarget[i].title == item.publicationTarget) {
+                        if (item.type == "Page" && $scope.pages) {
+                            return true;
+                        }
+                        if (item.type == "Component" && $scope.components) {
+                            return true;
+                        }
+                        if (item.type == "Category" && $scope.categories) {
+                            return true;
+                        }
+                        if (item.type == "ComponentTemplate" && $scope.templates) {
+                            return true;
                         }
                     }
+                }
+            }
 
-                };
-            };
-        });
+        };
+    };
+});
 
     </script>
+
+
+
+</head>
+<body>
     <div id="pub-summary" class="" ng-controller="alchmyController">
 
         <div class="col-sm-2 fixed">
@@ -251,8 +122,7 @@
                 <label for="todate" class="padding-top-5">To:</label>
                 <input type="date" name="todate" id="todate">
             </div>
-        </div>
-        <!-- Left Side Panel -->
+        </div> <!-- Left Side Panel -->
 
         <div class="col-sm-9 flex-item">
             <div class="row">
@@ -268,26 +138,6 @@
                 </div>
 
                 <div class="col-sm-9 top-left">
-                    <!--<div class="col-sm-1 glyphicon glyphicon-chevron-left"></div>
-                    <div class=" col-sm-9 summary-panel">
-                        <div class="summary-panel-heading col-sm-2">Live</div>
-                        <div class="summary-panel-details col-sm-3">
-                            <div>Total Published:<b>57</b></div>
-                            <div>Pages:<b>37</b></div>
-                            <div>Components:<b>13</b></div>
-                            <div>Categories:<b>7</b></div>
-                        </div>
-                        <div class="summary-panel-heading col-sm-2">Staging</div>
-                        <div class="summary-panel-details col-sm-3">
-                            <div>Total Published:<b>68</b></div>
-                            <div>Pages:<b>42</b></div>
-                            <div>Components:<b>18</b></div>
-                            <div>Categories:<b>8</b></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-1 glyphicon glyphicon-chevron-right"></div>
-                </div>-->
-
                     <div class="summary-panel-header-grid">
 							<div class="row-summary-panel">
 								<div class="summary-panel-heading col-sm-2">Live</div>	
@@ -350,23 +200,23 @@
             <div class="summary-grid">
                 <div class="row-eq-height row-header align-middle">
 
-                    <div class="col-xs-2">ID</div>
+                    <div class="col-xs-1">ID</div>
                     <div class="col-xs-2">Title</div>
                     <div class="col-xs-1">Item Type</div>
                     <div class="col-xs-2">Target</div>
                     <div class="col-xs-2">By</div>
                     <div class="col-xs-2">Date</div>
-                    <div class="col-xs-1">Action</div>
+                    <div class="col-xs-2">Action</div>
                 </div>
                 <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data)">
 
-                    <div class="col-xs-2">{{data.id}}</div>
+                    <div class="col-xs-1">{{data.id}}</div>
                     <div class="col-xs-2">{{data.title}}</div>
                     <div class="col-xs-1">{{data.type}}</div>
                     <div class="col-xs-2">{{data.publicationTarget}}</div>
                     <div class="col-xs-2">{{data.user}}</div>
                     <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
-                    <div class="col-xs-1">
+                    <div class="col-xs-2">
                         <a href="#" data-toggle="tooltip" title="Publish Item!">
                             <img class="action-icon" src="../img/publish.png" alt="Publish" /></a>
                         <a href="#" class="action-icon" data-toggle="tooltip" title="Unpublish Item!">
@@ -375,8 +225,7 @@
                             <img class="action-icon" src="../img/open.png" alt="Open" /></a>
                     </div>
                 </div>
-            </div>
-            <!-- Summary Grid -->
+            </div> <!-- Summary Grid -->
 
             <div class="col-sm-12 actions padding-left-5">
                 <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
@@ -384,12 +233,12 @@
                 <button class="col-sm-2 button">Unpublish Selected</button>
                 <button class="col-sm-3 button">Sync Publishing with Live</button>
                 <button class="col-sm-2 button">Show Delta</button>
-            </div>
-            <!-- CTA -->
+            </div> <!-- CTA -->
 
-        </div>
-        <!-- Right Side Panel -->
+        </div> <!-- Right Side Panel -->
     </div>
-    <script type="text/javascript">var removeSdlWebLoadInterval = setInterval(function () { if (!window.$display) { return; } clearInterval(removeSdlWebLoadInterval); if ($display && !$display.getView()) { if (window._activityIndicatorControl) { window._activityIndicatorControl.dispose(); window._activityIndicatorControl = null; } var sdlWebLoadingIndicator = $('style#loadingIndicator'); if (sdlWebLoadingIndicator) { $dom.removeNode(sdlWebLoadingIndicator); } } }, 500);</script>
+
+    </div>
+    <!--<script type="text/javascript">var removeSdlWebLoadInterval = setInterval(function () { if (!window.$display) { return; } clearInterval(removeSdlWebLoadInterval); if ($display && !$display.getView()) { if (window._activityIndicatorControl) { window._activityIndicatorControl.dispose(); window._activityIndicatorControl = null; } var sdlWebLoadingIndicator = $('style#loadingIndicator'); if (sdlWebLoadingIndicator) { $dom.removeNode(sdlWebLoadingIndicator); } } }, 500);</script>-->
 </body>
 </html>
