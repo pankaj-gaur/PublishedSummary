@@ -200,29 +200,29 @@ alchmyApp.controller('alchmyController', function ($scope, $http) {
             <div class="summary-grid">
                 <div class="row-eq-height row-header align-middle">
 
-                    <div class="col-xs-1">ID</div>
+                    <div class="col-xs-2">ID</div>
                     <div class="col-xs-2">Title</div>
-                    <div class="col-xs-1">Item Type</div>
-                    <div class="col-xs-2">Target</div>
+                    <div class="col-xs-2">Item Type</div>
+                    <div class="col-xs-1">Target</div>
                     <div class="col-xs-2">By</div>
                     <div class="col-xs-2">Date</div>
-                    <div class="col-xs-2">Action</div>
+                    <div class="col-xs-1">Action</div>
                 </div>
                 <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data)">
 
-                    <div class="col-xs-1">{{data.id}}</div>
+                    <div class="col-xs-2">{{data.id}}</div>
                     <div class="col-xs-2">{{data.title}}</div>
-                    <div class="col-xs-1">{{data.type}}</div>
-                    <div class="col-xs-2">{{data.publicationTarget}}</div>
+                    <div class="col-xs-2">{{data.type}}</div>
+                    <div class="col-xs-1">{{data.publicationTarget}}</div>
                     <div class="col-xs-2">{{data.user}}</div>
                     <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
-                    <div class="col-xs-2">
+                    <div class="col-xs-1">
                         <a href="#" data-toggle="tooltip" title="Publish Item!">
-                            <img class="action-icon" src="../img/publish.png" alt="Publish" /></a>
-                        <a href="#" class="action-icon" data-toggle="tooltip" title="Unpublish Item!">
-                            <img class="action-icon" src="../img/unpublish.png" alt="Unpublish" /></a>
-                        <a href="{{data.openItem}}" class="action-icon" data-toggle="tooltip" title="Open Item!" target="_blank">
-                            <img class="action-icon" src="../img/open.png" alt="Open" /></a>
+                            <img class="action-icon publish-icon" src="#" /></a>
+                        <a href="#" data-toggle="tooltip" title="Unpublish Item!">
+                            <img class="action-icon unpublish-icon" src="#"/></a>
+                        <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
+                            <img class="action-icon open-icon" src="#"/></a>
                     </div>
                 </div>
             </div> <!-- Summary Grid -->
