@@ -32,6 +32,10 @@
             });
 
             $scope.publicationTargets = [];
+            //var count = 0;
+            //for (var i in $scope.PublicationTarget){
+            //    $scope.publicationTargets[count++] = true;
+            //}
 
             $scope.pages = true;
             $scope.components = true;
@@ -41,7 +45,7 @@
             $scope.fromDate = null;
             $scope.toDate = null;
 
-            $scope.orderByField = 'id';
+            $scope.orderByField = 'title';
             $scope.reverseSort = false;
 
 
@@ -49,7 +53,6 @@
                 return function (item) {
                     for (var i in $scope.publicationTargets) {
                         if ($scope.publicationTargets[i]) {
-                            selected = true;
                             if ($scope.PublicationTarget[i].title == item.publicationTarget) {
                                 if (item.type == "Page" && $scope.pages) {
                                     return filteredDate(item);
@@ -67,7 +70,6 @@
                             }
                         }
                     }
-
                 };
             };
             var filteredDate = function (item) {
@@ -105,7 +107,7 @@
                 <h2>Publishing Target</h2>
 
                 <label class="checkbox-container" ng-repeat="data in PublicationTarget">
-                    <input type="checkbox" ng-model="publicationTargets[$index]" />{{data.title}}
+                    <input type="checkbox" ng-checked="true" ng-model="publicationTargets[$index]" ng-init="publicationTargets[$index]=true" />{{data.title}}
                      <span class="checkmark"></span>
                 </label>
             </div>
