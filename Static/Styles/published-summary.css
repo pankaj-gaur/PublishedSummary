@@ -257,3 +257,7 @@
 .history-icon {
     background-position: 0 -288px;
 }
+
+#pub-summary .selected-row {
+	background-color:#d0d0d0;
+}

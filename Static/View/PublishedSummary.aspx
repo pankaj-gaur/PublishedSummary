@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../css/published-summary.css">
     <link rel="stylesheet" type="text/css" href="../css/custom-control.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -85,6 +86,92 @@
                     return true;
                 }
             };
+
+            var publish = function (item) {
+                alert(item);
+                return true;
+            }
+
+        });
+
+        alchmyApp.directive("toggleClass", function () {
+            return {
+                link: function ($scope, element, attr) {
+                    element.on("click", function () {
+                        element.toggleClass("selected-row");
+                    });
+                }
+            }
+        });
+
+        $(document).ready(function () {
+            $("#btn_export").click(function () {
+                var csvArray = [];
+                var csv = "";
+                var dom = $$(".row-eq-height div");
+                for (var index = 0; index < dom.length; index++) {
+                    if ((index + 1) % 7 != 0) {
+                        csv += dom[index].innerText + ",";
+                    }
+                    else {
+                        csvArray.push(csv.slice(0, -1));
+                        csv = "";
+                    }
+                }
+                csvArray.push(csv.slice(0, -1));
+
+                console.log("csvArray JSON: " + JSON.stringify(csvArray));
+                downloadJSON2CSV(csvArray);
+            });
+
+            $("#btn_publish_selected").click(function () {
+                alert("test");
+                var dom2 = $$(".selected-row div");
+                for (var index = 0; index < dom2.length; index = index + 7) {
+                    alert(dom2[index].innerText);
+                }
+            });
+
+            $("#btn_unpublish_selected").click(function () {
+                var dom2 = $$(".selected-row div");
+                for (var index = 0; index < dom2.length; index = index + 7) {
+                    alert(dom2[index].innerText);
+                }
+
+            });
+
+            function publish(tcmURI) {
+                alert(tcmURI);
+            }
+
+            function unpublish(tcmURI) {
+                alert(tcmURI);
+            }
+
+            function downloadJSON2CSV(objArray) {
+                //var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+                var array = objArray;
+                console.log("Array Passed: " + array);
+                var str = '';
+                console.log("Array Length: " + array.length);
+                for (var i = 0; i < array.length; i++) {
+                    str += array[i] + '\r\n';
+                }
+
+                console.log("str: " + str);
+
+                if (navigator.appName != 'Microsoft Internet Explorer') {
+                    window.open('data:text/csv;charset=utf-8,' + escape(str));
+                }
+                else {
+                    var popup = window.open('', 'csv', '');
+                    popup.document.body.innerHTML = '<pre>' + str + '</pre>';
+                }
+            };
+
+
+
+
         });
 
     </script>
@@ -243,7 +330,7 @@
                         </div>
                         <div class="col-xs-1">Action</div>
                     </div>
-                    <div class="row-eq-height" ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data) | orderBy:orderByField:reverseSort">
+                    <div id="test" class="row-eq-height" toggle-class ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data) | orderBy:orderByField:reverseSort">
 
                         <div class="col-xs-2">{{data.id}}</div>
                         <div class="col-xs-2">{{data.title}}</div>
@@ -252,9 +339,9 @@
                         <div class="col-xs-2">{{data.user}}</div>
                         <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
                         <div class="col-xs-1">
-                            <a href="#" data-toggle="tooltip" title="Publish Item!">
+                            <a href="#" ng-click="publish({{data.id}});" data-toggle="tooltip" title="Publish Item!">
                                 <img class="action-icon publish-icon" src="#" /></a>
-                            <a href="#" data-toggle="tooltip" title="Unpublish Item!">
+                            <a href="unpublish({{data.id}});" data-toggle="tooltip" title="Unpublish Item!">
                                 <img class="action-icon unpublish-icon" src="#" /></a>
                             <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
                                 <img class="action-icon open-icon" src="#" /></a>
@@ -266,8 +353,8 @@
 
                 <div class="col-sm-12 actions padding-left-5">
                     <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
-                    <button class="col-sm-2 button">Publish Selected</button>
-                    <button class="col-sm-2 button">Unpublish Selected</button>
+                    <button id="btn_publish_selected" class="col-sm-2 button">Publish Selected</button>
+                    <button id="btn_unpublish_selected" class="col-sm-2 button">Unpublish Selected</button>
                     <button class="col-sm-3 button">Sync Publishing with Live</button>
                     <button class="col-sm-2 button">Show Delta</button>
                 </div>
