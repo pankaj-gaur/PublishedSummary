@@ -136,8 +136,8 @@ namespace PublishedSummary.Controllers
         /// Gets the analytic data.
         /// </summary>
         /// <returns>System.Object.</returns>
-        [HttpGet, Route("GetAnalyticData")]
-        public object GetAnalyticData()
+        [HttpGet, Route("GetSummaryPanelData")]
+        public object GetSummaryPanelData()
         {
             string[] tcmIds = { "tcm:0-14-1"};
             GetPublishedInfo getFinalPublishedInfo = new GetPublishedInfo();

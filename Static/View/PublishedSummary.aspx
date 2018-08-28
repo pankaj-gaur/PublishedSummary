@@ -27,7 +27,7 @@
                 $scope.PublicationList = response;
             });
 
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAnalyticData").success(function (response) {
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData").success(function (response) {
                 $scope.AnalyticData = response;
             });
 
