@@ -32,10 +32,6 @@
             });
 
             $scope.publicationTargets = [];
-            //var count = 0;
-            //for (var i in $scope.PublicationTarget){
-            //    $scope.publicationTargets[count++] = true;
-            //}
 
             $scope.pages = true;
             $scope.components = true;
