@@ -78,10 +78,10 @@ namespace PublishedSummary.Helper
             tempItem.PublicationTarget = getPublishedInfo.PublicationTarget.Title;
             tempItem.User = getPublishedInfo.User.Title;
             tempItem.openItem = PageURL.GetDomain() + "/WebUI/item.aspx?tcm=" + item.Type + "#id=" + item.ID;
-            tempItem.Type = item.Type == "64" ? Enum.GetName(typeof(ItemType), 64) :
-                item.Type == "512" ? Enum.GetName(typeof(ItemType), 512) :
-                item.Type == "32" ? Enum.GetName(typeof(ItemType), 32) :
-                item.Type == "16" ? Enum.GetName(typeof(ItemType), 16) : item.Type;
+            tempItem.Type = item.Type != "64" ? item.Type != "512" ? item.Type != "32" ? item.Type == "16" ? Enum.GetName(typeof(ItemType), 16) : item.Type :
+                Enum.GetName(typeof(ItemType), 32) :
+                Enum.GetName(typeof(ItemType), 512) :
+                Enum.GetName(typeof(ItemType), 64);
             tempItem.PublishedAt = getPublishedInfo.PublishedAt;
             finalList.Add(tempItem);
         }
@@ -106,9 +106,9 @@ namespace PublishedSummary.Helper
         public List<Publications> Publications(XmlDocument publicationList, XElement publications)
         {
             publicationList.Load(publications.CreateReader());
-            ListPublications pubList = TransformObjectAndXml.Deserialize<ListPublications>(publicationList);
-            List<Publications> items = pubList.Item;
-            List<Publications> item2 = new List<Publications>();
+            var pubList = TransformObjectAndXml.Deserialize<ListPublications>(publicationList);
+            var items = pubList.Item;
+            var item2 = new List<Publications>();
             foreach (var item in items)
             {
                 var splitTcmid = item.ID.Split('-');
