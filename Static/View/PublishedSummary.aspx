@@ -16,6 +16,44 @@
     <script type="text/javascript" src="../js/PublishedSummary.js"></script>
 
     <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
+                data: "{'IDs':[{ 'Id': 'tcm:14-877-64', 'Target': 'DXA Staging'},{ 'Id': 'tcm:14-1867-64', 'Target': 'DXA Staging'}]}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        });
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
+                data: "{'IDs':[{ 'Id': 'tcm:14-877-64', 'Target': 'DXA Staging'},{ 'Id': 'tcm:14-1867-64', 'Target': 'DXA Staging'}]}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        });
         alchmyApp = angular.module('alchmyApp', []);
         alchmyApp.controller('alchmyController', function ($scope, $http) {
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {

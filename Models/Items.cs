@@ -178,4 +178,15 @@ namespace PublishedSummary.Models
 
          
     }
+    public class data  
+    {
+        
+        public List<PublishUnPublishData> IDs { get; set; }
+    }
+    public class PublishUnPublishData
+    {
+        public string Target { get; set; }
+        
+        public string Id { get; set; }
+    }
 }

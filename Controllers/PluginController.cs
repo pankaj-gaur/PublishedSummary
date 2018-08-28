@@ -23,6 +23,9 @@ using Newtonsoft.Json.Linq;
 using PublishedSummary.Models;
 using System.Linq;
 using System;
+using System.Collections;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using TCM = Tridion.ContentManager;
 namespace PublishedSummary.Controllers
 {
@@ -43,7 +46,7 @@ namespace PublishedSummary.Controllers
         /// Gets the publication list.
         /// </summary>
         /// <returns>List&lt;Publications&gt;.</returns>
-        [HttpGet,Route("GetPublicationList")]
+        [HttpGet, Route("GetPublicationList")]
         public List<Publications> GetPublicationList()
         {
             GetPublishedInfo getPublishedInfo = new GetPublishedInfo();
@@ -61,7 +64,7 @@ namespace PublishedSummary.Controllers
         /// Gets the publication target.
         /// </summary>
         /// <returns>System.Object.</returns>
-        [HttpGet,Route("GetPublicationTarget")]
+        [HttpGet, Route("GetPublicationTarget")]
         public object GetPublicationTarget()
         {
             var filter = new TargetTypesFilterData();
@@ -81,7 +84,7 @@ namespace PublishedSummary.Controllers
         [HttpGet, Route("GetAllPublishedItems")]
         public object GetAllPublishedItems(/*JObject tcmIDs*/)
         {
-           string[] demoids = { "tcm:0-14-1"};
+            string[] demoids = { "tcm:0-14-1" };
             GetPublishedInfo getFinalPublishedInfo = new GetPublishedInfo();
             var multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
@@ -96,20 +99,25 @@ namespace PublishedSummary.Controllers
                     case CONSTANTS.PUBLICATION:
                         listXml = Client.GetListXml(tcmId.ToString(), new RepositoryItemsFilterData
                         {
-                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },Recursive = true,
+                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
+                            Recursive = true,
                             BaseColumns = ListBaseColumns.Extended
                         });
                         break;
                     case CONSTANTS.FOLDER:
                         listXml = Client.GetListXml(tcmId.ToString(), new OrganizationalItemItemsFilterData
                         {
-                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate },Recursive = true,BaseColumns = ListBaseColumns.Extended
+                            ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate },
+                            Recursive = true,
+                            BaseColumns = ListBaseColumns.Extended
                         });
                         break;
                     case CONSTANTS.STRUCTUREGROUP:
                         listXml = Client.GetListXml(tcmId.ToString(), new OrganizationalItemItemsFilterData()
                         {
-                            ItemTypes = new[] { ItemType.Page },Recursive = true,BaseColumns = ListBaseColumns.Extended
+                            ItemTypes = new[] { ItemType.Page },
+                            Recursive = true,
+                            BaseColumns = ListBaseColumns.Extended
                         });
                         break;
                     case CONSTANTS.CATEGORY:
@@ -131,7 +139,7 @@ namespace PublishedSummary.Controllers
         }
         #endregion
 
-        #region Get GetAnalyticData
+        #region Get GetSummaryPanelData
         /// <summary>
         /// Gets the analytic data.
         /// </summary>
@@ -139,7 +147,7 @@ namespace PublishedSummary.Controllers
         [HttpGet, Route("GetSummaryPanelData")]
         public object GetSummaryPanelData()
         {
-            string[] tcmIds = { "tcm:0-14-1"};
+            string[] tcmIds = { "tcm:0-14-1" };
             GetPublishedInfo getFinalPublishedInfo = new GetPublishedInfo();
             var multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
@@ -147,19 +155,21 @@ namespace PublishedSummary.Controllers
             {
                 var listXml = Client.GetListXml(tcmId, new RepositoryItemsFilterData
                 {
-                    ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },Recursive = true,
-                    BaseColumns = ListBaseColumns.Extended});
+                    ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
+                    Recursive = true,
+                    BaseColumns = ListBaseColumns.Extended
+                });
                 if (listXml == null) throw new ArgumentNullException(nameof(listXml));
                 doc.LoadXml(listXml.ToString());
                 multipleListItems.Add(TransformObjectAndXml.Deserialize<ListItems>(doc));
             }
             List<Item> finalList = new List<Item>();
             foreach (var publishedItem in getFinalPublishedInfo.FilterIsPublishedItem(multipleListItems))
-            foreach (var item in publishedItem)
-            {
-                var publishInfo = Client.GetListPublishInfo(item.ID);
-                foreach (var item1 in getFinalPublishedInfo.ReturnFinalList(publishInfo, item)) finalList.Add(item1);
-            }
+                foreach (var item in publishedItem)
+                {
+                    var publishInfo = Client.GetListPublishInfo(item.ID);
+                    foreach (var item1 in getFinalPublishedInfo.ReturnFinalList(publishInfo, item)) finalList.Add(item1);
+                }
             IEnumerable<Analytics> analytics = finalList.GroupBy(x => new { x.PublicationTarget, x.Type }).Select(g => new Analytics { Count = g.Count(), PublicationTarget = g.Key.PublicationTarget, ItemType = g.Key.Type, });
             return analytics;
         }
@@ -180,5 +190,76 @@ namespace PublishedSummary.Controllers
         }
         #endregion
 
+
+        /// <summary>
+        /// Publishes the items.
+        /// </summary>
+        /// <param name="IDs">The i ds.</param>
+        /// <returns>System.Int32.</returns>
+        /// <exception cref="ArgumentNullException">result</exception>
+        [HttpPost, Route("PublishItems")]
+        public int PublishItems(JObject IDs)
+        {
+            var pubInstruction = new PublishInstructionData()
+            {
+                ResolveInstruction = new ResolveInstructionData() { IncludeChildPublications = false },
+                RenderInstruction = new RenderInstructionData()
+            };
+            PublishTransactionData[] result = null;
+            JsonSerializer js = new JsonSerializer();
+            data tcmIDs = (data)js.Deserialize(new JTokenReader(IDs), typeof(data));
+            var tfilter = new TargetTypesFilterData();
+            var allPublicationTargets = Client.GetSystemWideList(tfilter);
+            if (allPublicationTargets == null) throw new ArgumentNullException(nameof(allPublicationTargets));
+            foreach (var pubdata in tcmIDs.IDs)
+            {
+                var target = allPublicationTargets.Where(x => x.Title == pubdata.Target).Select(x => x.Id).ToList();
+                if (target.Any())
+                {
+                    result = Client.Publish(new[] { pubdata.Id }, pubInstruction, new[] { target[0] }, PublishPriority.Normal, null);
+                    if (result == null) throw new ArgumentNullException(nameof(result));
+
+                }
+
+            }
+            return tcmIDs.IDs.Count;
+        }
+        /// <summary>
+        /// Uns the publish items.
+        /// </summary>
+        /// <param name="IDs">The i ds.</param>
+        /// <returns>System.Object.</returns>
+        /// <exception cref="ArgumentNullException">result</exception>
+        [HttpPost, Route("UnPublishItems")]
+        public object UnPublishItems(JObject IDs)
+        {
+            var unPubInstruction = new UnPublishInstructionData()
+            {
+                ResolveInstruction = new ResolveInstructionData()
+                {
+                    IncludeChildPublications = false,
+                    Purpose = ResolvePurpose.UnPublish,
+                },
+                RollbackOnFailure = true
+
+            };
+            JsonSerializer js = new JsonSerializer();
+            PublishTransactionData[] result = null;
+            var tfilter = new TargetTypesFilterData();
+            var allPublicationTargets = Client.GetSystemWideList(tfilter);
+            if (allPublicationTargets == null) throw new ArgumentNullException(nameof(allPublicationTargets));
+            data tcmIDs = (data)js.Deserialize(new JTokenReader(IDs), typeof(data));
+            foreach (var tcmID in tcmIDs.IDs)
+            {
+                var target = allPublicationTargets.Where(x => x.Title == tcmID.Target).Select(x => x.Id).ToList();
+                if (target.Any())
+                {
+                    result = Client.UnPublish(new[] { tcmID.Id }, unPubInstruction, new[] { target[0] }, PublishPriority.Normal, null);
+                    if (result == null) throw new ArgumentNullException(nameof(result));
+
+                }
+            }
+            return result;
+        }
     }
 }
