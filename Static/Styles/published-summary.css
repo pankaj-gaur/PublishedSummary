@@ -73,26 +73,27 @@
     width: 25%;
 }
 
-    #pub-summary .summary-panel-heading {
+#pub-summary .summary-panel-heading {
     font-size: 12px;
     font-weight: bold;
-    margin-right: 10px;
-	padding-right:10px;
+    margin-right: 65px;
+    padding-right: 10px;
     color: #867d79;
     /*float: left;*/
     height: 100%;
-    border-right: 0.1em solid #867d79
+   
 }
 
 #pub-summary .summary-panel-details {
     font-size: 11px;
-	margin-right: 10px;
-	padding-right:10px;
+    margin-right: 10px;
+    padding-right: 10px;
     color: #867d79;
     float: left;
     height: 100%;
     margin-left: 3px;
-    margin-bottom:0px;
+    margin-bottom: 0px;
+    border-left: 0.1em solid #867d79
 }
 
 #pub-summary .clear-filter-link {
