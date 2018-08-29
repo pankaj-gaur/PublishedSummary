@@ -82,15 +82,15 @@ namespace PublishedSummary.Controllers
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException">listXml</exception>
         [HttpGet, Route("GetAllPublishedItems")]
-        public object GetAllPublishedItems(/*JObject tcmIDs*/)
+        public object GetAllPublishedItems(JObject tcmIDs)
         {
-            string[] demoids = { "tcm:0-14-1" };
+            //string[] demoids = { "tcm:0-14-1" };
             GetPublishedInfo getFinalPublishedInfo = new GetPublishedInfo();
             var multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
-            //dynamic iDs = tcmIDs;
-            //var itemIDs = iDs.IDs;
-            foreach (var tcmId in demoids)
+            dynamic iDs = tcmIDs;
+            var itemIDs = iDs.IDs;
+            foreach (var tcmId in itemIDs)
             {
                 TCM.TcmUri iTcmUri = new TCM.TcmUri(tcmId.ToString());
                 XElement listXml = null;
