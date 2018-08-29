@@ -51,32 +51,11 @@
                 error: function (response) {
                     alert(response.responseText);
                 }
-            }); 
+            });
 
         });
         alchemyApp = angular.module('alchemyApp', []);
         alchemyApp.controller('alchemyController', function ($scope, $http) {
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
-                $scope.PublicationTarget = response;
-            });
-            $http({
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
-                method: "POST",
-                data: "{'IDs':['tcm:0-14-1']}"
-            }).success(function (response) {
-                $scope.PublishedItems = response;
-            });
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
-                $scope.PublicationList = response;
-            });
-
-            $http({
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
-                method: "POST",
-                data: "{'IDs':['tcm:0-14-1']}"
-            }).success(function (response) {
-                $scope.PublishedSummaryPanelData = response;
-            });
 
             $scope.publicationTargets = [];
 
@@ -91,6 +70,31 @@
             $scope.orderByField = 'title';
             $scope.reverseSort = false;
 
+
+            $scope.Publications = {};
+            $scope.Publications.itemId = "tcm:0-14-1";
+
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
+                $scope.PublicationTarget = response;
+            });
+            $http({
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
+                method: "POST",
+                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
+            }).success(function (response) {
+                $scope.PublishedItems = response;
+            });
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
+                $scope.Publications.PublicationList = response;
+            });
+
+            $http({
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
+                method: "POST",
+                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
+            }).success(function (response) {
+                $scope.PublishedSummaryPanelData = response;
+            });
 
             $scope.filteredPublishedItems = function (items) {
                 return function (item) {
@@ -215,9 +219,6 @@
                 }
             };
 
-
-
-
         });
 
     </script>
@@ -285,8 +286,7 @@
             <div class="row">
                 <div class="col-sm-3 top-left">
                     <div class="select">
-                        <select name="publications" id="publications">
-                            <option ng-repeat="data in PublicationList" value="{{data.id}}">{{data.title}}</option>
+                        <select name="publications" id="publications" ng-model="Publications.itemId" ng-options="publication.id as publication.title for publication in Publications.PublicationList">
                         </select>
                     </div>
                     <div>
