@@ -4,7 +4,7 @@
 // Created          : 08-20-2018
 //
 // Last Modified By : admin
-// Last Modified On : 08-22-2018
+// Last Modified On : 08-28-2018
 // ***********************************************************************
 // <copyright file="Items.cs" company="Content Bloom">
 //     Copyright © Content Bloom 2018
@@ -178,15 +178,33 @@ namespace PublishedSummary.Models
 
          
     }
+    /// <summary>
+    /// Class data.
+    /// </summary>
     public class data  
     {
-        
+
+        /// <summary>
+        /// Gets or sets the i ds.
+        /// </summary>
+        /// <value>The i ds.</value>
         public List<PublishUnPublishData> IDs { get; set; }
     }
+    /// <summary>
+    /// Class PublishUnPublishData.
+    /// </summary>
     public class PublishUnPublishData
     {
+        /// <summary>
+        /// Gets or sets the target.
+        /// </summary>
+        /// <value>The target.</value>
         public string Target { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
         public string Id { get; set; }
     }
 }

@@ -12,12 +12,9 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using Newtonsoft.Json.Linq;
 
 namespace PublishedSummary.Helper
 {
@@ -26,7 +23,7 @@ namespace PublishedSummary.Helper
     /// </summary>
     public class TransformObjectAndXml
     {
-        public static List<string> InvalidJsonElements;
+        
         /// <summary>
         /// Deserializes the specified XML document.
         /// </summary>
@@ -71,31 +68,7 @@ namespace PublishedSummary.Helper
                 return false;
             }
         }
-
-
-
-        public static IList<T> DeserializeToList<T>(string jsonString)
-        {
-            InvalidJsonElements = null;
-            var array = JArray.Parse(jsonString);
-            IList<T> objectsList = new List<T>();
-            foreach (var item in array)
-            {
-                try
-                {
-
-                    objectsList.Add(item.ToObject<T>());
-                }
-                catch (Exception ex)
-                {
-                    InvalidJsonElements = InvalidJsonElements ?? new List<string>();
-                    InvalidJsonElements.Add(item.ToString());
-                }
-            }
-
-            return objectsList;
-
-        }
+        
 
 
     }
