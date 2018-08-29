@@ -132,15 +132,35 @@ namespace PublishedSummary.Helper
             {
                 ItemSummary itemsum = new ItemSummary();
                 var analyticses = analytics as Analytics[] ?? analytics.ToArray();
-                var page = analyticses.Where(x => (x.ItemType == "Page") && (x.PublicationTarget == PublicationTarget.Title)).Select(x => x.Count).ToList();
-                var componentTemplate = analyticses.Where(x => (x.ItemType == "ComponentTemplate") && (x.PublicationTarget == PublicationTarget.Title)).Select(x => x.Count).ToList();
-                var component = analyticses.Where(x => (x.ItemType == "Component") && (x.PublicationTarget == PublicationTarget.Title)).Select(x => x.Count).ToList();
-                var category = analyticses.Where(x => (x.ItemType == "Category") && (x.PublicationTarget == PublicationTarget.Title)).Select(x => x.Count).ToList();
+                var page = analyticses.Where(x =>
+                        (x.ItemType == "Page") && (x.PublicationTarget == PublicationTarget.Title))
+                    .Select(x => x.Count)
+                    .ToList();
+                var componentTemplate = analyticses.Where(x =>
+                        (x.ItemType == "ComponentTemplate") && (x.PublicationTarget == PublicationTarget.Title))
+                    .Select(x => x.Count)
+                    .ToList();
+                var component = analyticses.Where(x =>
+                        (x.ItemType == "Component") && (x.PublicationTarget == PublicationTarget.Title))
+                    .Select(x => x.Count)
+                    .ToList();
+                var category = analyticses.Where(x =>
+                        (x.ItemType == "Category") && (x.PublicationTarget == PublicationTarget.Title))
+                    .Select(x => x.Count)
+                    .ToList();
                 itemsum.title = PublicationTarget.Title;
-                itemsum.page = page.Count > 0 ? page[0] : 0;
-                itemsum.componentTemplate = componentTemplate.Count > 0 ? componentTemplate[0] : 0;
-                itemsum.component = component.Count > 0 ? component[0] : 0;
-                itemsum.category = category.Count > 0 ? component[0] : 0;
+                itemsum.page = page.Count > 0
+                    ? page[0]
+                    : 0;
+                itemsum.componentTemplate = componentTemplate.Count > 0
+                    ? componentTemplate[0]
+                    : 0;
+                itemsum.component = component.Count > 0
+                    ? component[0]
+                    : 0;
+                itemsum.category = category.Count > 0
+                    ? component[0]
+                    : 0;
 
                 itemssummary.Add(itemsum);
             }
