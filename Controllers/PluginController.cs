@@ -23,8 +23,6 @@ using Newtonsoft.Json.Linq;
 using PublishedSummary.Models;
 using System.Linq;
 using System;
-using System.Collections;
-using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using TCM = Tridion.ContentManager;
 namespace PublishedSummary.Controllers
