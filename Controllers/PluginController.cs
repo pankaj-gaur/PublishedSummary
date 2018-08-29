@@ -81,7 +81,7 @@ namespace PublishedSummary.Controllers
         /// <returns>System.Object.</returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException">listXml</exception>
-        [HttpGet, Route("GetAllPublishedItems")]
+        [HttpPost, Route("GetAllPublishedItems")]
         public object GetAllPublishedItems(JObject tcmIDs)
         {
             //string[] demoids = { "tcm:0-14-1" };
