@@ -1,6 +1,6 @@
 <%@ Page Inherits="Tridion.Web.UI.Controls.TridionPage" %>
 
-<html ng-app="alchmyApp">
+<html ng-app="alchemyApp">
 <head runat="server">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="../css/published-summary.css">
@@ -51,22 +51,30 @@
                 error: function (response) {
                     alert(response.responseText);
                 }
-            });
+            }); 
 
         });
-        alchmyApp = angular.module('alchmyApp', []);
-        alchmyApp.controller('alchmyController', function ($scope, $http) {
+        alchemyApp = angular.module('alchemyApp', []);
+        alchemyApp.controller('alchemyController', function ($scope, $http) {
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
                 $scope.PublicationTarget = response;
             });
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems").success(function (response) {
+            $http({
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
+                method: "POST",
+                data: "{'IDs':['tcm:0-14-1']}"
+            }).success(function (response) {
                 $scope.PublishedItems = response;
             });
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
                 $scope.PublicationList = response;
             });
 
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData").success(function (response) {
+            $http({
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
+                method: "POST",
+                data: "{'IDs':['tcm:0-14-1']}"
+            }).success(function (response) {
                 $scope.PublishedSummaryPanelData = response;
             });
 
@@ -132,7 +140,7 @@
 
         });
 
-        alchmyApp.directive("toggleClass", function () {
+        alchemyApp.directive("toggleClass", function () {
             return {
                 link: function ($scope, element, attr) {
                     element.on("click", function () {
@@ -218,7 +226,7 @@
 
 </head>
 <body>
-    <div id="pub-summary" class="" ng-controller="alchmyController">
+    <div id="pub-summary" class="" ng-controller="alchemyController">
 
         <div class="col-sm-2 fixed">
             <img src="../img/content-bloom-logo-150x75.jpg" alt="www.contentbloom.com" />
