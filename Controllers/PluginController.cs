@@ -144,14 +144,16 @@ namespace PublishedSummary.Controllers
         /// Gets the analytic data.
         /// </summary>
         /// <returns>System.Object.</returns>
-        [HttpGet, Route("GetSummaryPanelData")]
-        public object GetSummaryPanelData()
+        [HttpPost, Route("GetSummaryPanelData")]
+        public object GetSummaryPanelData(JObject tcmIDs)
         {
-            string[] tcmIds = { "tcm:0-14-1" };
+           // string[] tcmIds = { "tcm:0-14-1" };
+            dynamic iDs = tcmIDs;
+            var itemIDs = iDs.IDs;
             GetPublishedInfo getFinalPublishedInfo = new GetPublishedInfo();
             var multipleListItems = new List<ListItems>();
             XmlDocument doc = new XmlDocument();
-            foreach (var tcmId in tcmIds)
+            foreach (var tcmId in itemIDs)
             {
                 var listXml = Client.GetListXml(tcmId, new RepositoryItemsFilterData
                 {
