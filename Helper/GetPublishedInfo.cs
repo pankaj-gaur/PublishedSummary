@@ -108,14 +108,14 @@ namespace PublishedSummary.Helper
             publicationList.Load(publications.CreateReader());
             var pubList = TransformObjectAndXml.Deserialize<ListPublications>(publicationList);
             var items = pubList.Item;
-            var item2 = new List<Publications>();
-            foreach (var item in items)
-            {
-                var splitTcmid = item.ID.Split('-');
-                item.ID = splitTcmid[1];
-                item2.Add(item);
-            }
-            return item2;
+            //var item2 = new List<Publications>();
+            //foreach (var item in items)
+            //{
+            //    var splitTcmid = item.ID.Split('-');
+            //    item.ID = splitTcmid[1];
+            //    item2.Add(item);
+            //}
+            return items;
         }
 
 
