@@ -171,7 +171,29 @@ namespace PublishedSummary.Controllers
                     foreach (var item1 in getFinalPublishedInfo.ReturnFinalList(publishInfo, item)) finalList.Add(item1);
                 }
             IEnumerable<Analytics> analytics = finalList.GroupBy(x => new { x.PublicationTarget, x.Type }).Select(g => new Analytics { Count = g.Count(), PublicationTarget = g.Key.PublicationTarget, ItemType = g.Key.Type, });
-            return analytics;
+
+            var tfilter = new TargetTypesFilterData();
+            var allPublicationTargets = Client.GetSystemWideList(tfilter);
+
+
+            List<ItemSummary> itemssummary = new List<ItemSummary>();
+            foreach (var v in allPublicationTargets)
+            {
+                ItemSummary itemsum = new ItemSummary();
+                var analyticses = analytics as Analytics[] ?? analytics.ToArray();
+                var page = analyticses.Where(x => (x.ItemType == "Page") && (x.PublicationTarget == v.Title)).Select(x => x.Count).ToList();
+                var componentTemplate = analyticses.Where(x => (x.ItemType == "ComponentTemplate") && (x.PublicationTarget == v.Title)).Select(x => x.Count).ToList();
+                var component = analyticses.Where(x => (x.ItemType == "Component") && (x.PublicationTarget == v.Title)).Select(x => x.Count).ToList();
+                var category = analyticses.Where(x => (x.ItemType == "Category") && (x.PublicationTarget == v.Title)).Select(x => x.Count).ToList();
+                itemsum.title = v.Title;
+                itemsum.page = page.Count > 0 ? page[0] : 0;
+                itemsum.componentTemplate = componentTemplate.Count > 0 ? componentTemplate[0] : 0;
+                itemsum.component = component.Count > 0 ? component[0] : 0;
+                itemsum.category = category.Count > 0 ? component[0] : 0;
+
+                itemssummary.Add(itemsum);
+            }
+            return itemssummary;
         }
         #endregion
 
