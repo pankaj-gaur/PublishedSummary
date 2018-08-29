@@ -155,7 +155,7 @@ namespace PublishedSummary.Controllers
             XmlDocument doc = new XmlDocument();
             foreach (var tcmId in itemIDs)
             {
-                var listXml = Client.GetListXml(tcmId, new RepositoryItemsFilterData
+                var listXml = Client.GetListXml(tcmId.ToString(), new RepositoryItemsFilterData
                 {
                     ItemTypes = new[] { ItemType.Component, ItemType.ComponentTemplate, ItemType.Category, ItemType.Page },
                     Recursive = true,
