@@ -67,7 +67,7 @@
             });
 
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData").success(function (response) {
-                $scope.AnalyticData = response;
+                $scope.PublishedSummaryPanelData = response;
             });
 
             $scope.publicationTargets = [];
@@ -289,53 +289,19 @@
                 <div class="col-sm-9 top-left">
                     <div class="summary-panel-header-grid">
                         <div class="row-summary-panel">
-                            <div class="summary-panel-heading col-sm-2">Live</div>
+                            <div ng-repeat="data in PublishedSummaryPanelData">
+                                <div class="summary-panel-heading col-sm-2">{{data.title}}</div>
 
-                            <div class="summary-panel-details col-sm-4">
-                                <div>Total:<b>57</b></div>
-                                <div>Pages:<b>37</b></div>
-                                <div>Components:<b>13</b></div>
-                                <div>Categories:<b>7</b></div>
-                            </div>
-
-                            <div class="summary-panel-heading col-sm-2">Staging</div>
-
-                            <div class="summary-panel-details col-sm-4">
-                                <div>Total:<b>57</b></div>
-                                <div>Pages:<b>37</b></div>
-                                <div>Components:<b>13</b></div>
-                                <div>Categories:<b>7</b></div>
-                            </div>
-
-                            <div class="summary-panel-heading col-sm-2">Acceptance</div>
-
-                            <div class="summary-panel-details col-sm-4">
-                                <div>Total:<b>57</b></div>
-                                <div>Pages:<b>37</b></div>
-                                <div>Components:<b>13</b></div>
-                                <div>Categories:<b>7</b></div>
-                            </div>
-
-                            <div class="summary-panel-heading col-sm-2">Prod</div>
-
-                            <div class="summary-panel-details col-sm-4">
-                                <div>Total:<b>57</b></div>
-                                <div>Pages:<b>37</b></div>
-                                <div>Components:<b>13</b></div>
-                                <div>Categories:<b>7</b></div>
-                            </div>
-
-                            <div class="summary-panel-heading col-sm-2">Prod</div>
-
-                            <div class="summary-panel-details col-sm-4">
-                                <div>Total:<b>57</b></div>
-                                <div>Pages:<b>37</b></div>
-                                <div>Components:<b>13</b></div>
-                                <div>Categories:<b>7</b></div>
+                                <div class="summary-panel-details col-sm-4">
+                                    <div>Total:<b>{{data.page + data.component  + data.category + data.componentTemplate }}</b></div>
+                                    <div>Pages:<b>{{data.page}}</b></div>
+                                    <div>Components:<b>{{data.component}}</b></div>
+                                    <div>Categories:<b>{{data.category}}</b></div>
+                                    <div>Templates:<b>{{data.componentTemplate}}</b></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <!-- Summary Panel and Publication Dropdown -->
 
