@@ -190,7 +190,7 @@ namespace PublishedSummary.Controllers
         }
         #endregion
 
-
+        #region Publishe the items
         /// <summary>
         /// Publishes the items.
         /// </summary>
@@ -224,6 +224,10 @@ namespace PublishedSummary.Controllers
             }
             return tcmIDs.IDs.Count;
         }
+
+        #endregion
+
+        #region Unpublish the items
         /// <summary>
         /// Uns the publish items.
         /// </summary>
@@ -262,4 +266,5 @@ namespace PublishedSummary.Controllers
             return result;
         }
     }
+    #endregion
 }
