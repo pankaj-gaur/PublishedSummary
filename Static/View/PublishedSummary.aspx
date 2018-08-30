@@ -6,17 +6,16 @@
     <link rel="stylesheet" type="text/css" href="../css/published-summary.css">
     <link rel="stylesheet" type="text/css" href="../css/custom-control.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
-
-    <script type="text/javascript" src="../js/PublishedSummary.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    
 
     <script>
         $(document).ready(function () {
+            alert("JavaScript: "+this.window.dialogArguments);
             $.ajax({
                 type: "POST",
                 url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
@@ -55,10 +54,9 @@
 
         });
         alchemyApp = angular.module('alchemyApp', []);
-        alchemyApp.controller('alchemyController', function ($scope, $http) {
+        alchemyApp.controller('alchemyController',['$scope', '$http', '$window', function ($scope, $http, $window) {
 
             $scope.publicationTargets = [];
-
             $scope.pages = true;
             $scope.components = true;
             $scope.categories = true;
@@ -72,7 +70,8 @@
 
 
             $scope.Publications = {};
-            $scope.Publications.itemId = "tcm:0-14-1";
+            $scope.Publications.itemId = "tcm:0-14-1";//$window.alert("AngularJS: "+$window.dialogArguments);
+
 
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
                 $scope.PublicationTarget = response;
@@ -142,7 +141,7 @@
                 return true;
             }
 
-        });
+        }]);
 
         alchemyApp.directive("toggleClass", function () {
             return {
@@ -357,7 +356,7 @@
                         <div class="col-xs-2">{{data.user}}</div>
                         <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
                         <div class="col-xs-1">
-                            <a href="#" ng-click="publish({{data.id}});" data-toggle="tooltip" title="Publish Item!">
+                            <a href="#" data-toggle="tooltip" title="Publish Item!">
                                 <img class="action-icon publish-icon" src="#" /></a>
                             <a href="unpublish({{data.id}});" data-toggle="tooltip" title="Unpublish Item!">
                                 <img class="action-icon unpublish-icon" src="#" /></a>

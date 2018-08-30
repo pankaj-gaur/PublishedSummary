@@ -65,15 +65,15 @@ Alchemy.command("${PluginName}", "PublishedSummary", {
             popup.focus();
         }
         else {
-            popup = $popup.create(url, "menubar=no,location=no,resizable=no,scrollbars=yes,status=no,width=1340,height=580", args);
+            popup = $popup.create(url, "menubar=no,location=no,resizable=no,scrollbars=yes,status=no,width=1340,height=580", args).open();
 
-            this.properties.popupInstance = popup;
+            /*this.properties.popupInstance = popup;
             this.properties.popupCloseHandler = onPopupClose;
 
             $evt.addEventHandler(popup, "unload", this.getDelegate(onPopupClose));
             $evt.addEventHandler(popup, "load", this.getDelegate(this.onLoad));
 
-            popup.open();
+            popup.open();*/
         }
        
     },

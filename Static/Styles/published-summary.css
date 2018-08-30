@@ -55,6 +55,8 @@
 
 #pub-summary .flex-item hr {
     margin-top: 7px;
+    margin-right: 15px;
+    margin-left: -15px
 }
 
 #pub-summary .summary-panel {
