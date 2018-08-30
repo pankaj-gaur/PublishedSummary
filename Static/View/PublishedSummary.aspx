@@ -76,6 +76,17 @@
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
                 $scope.PublicationTarget = response;
             });
+
+            $scope.onChange = function () {
+                $http({
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
+                method: "POST",
+                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
+            }).success(function (response) {
+                $scope.PublishedItems = response;
+            });
+            }
+
             $http({
                 url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
                 method: "POST",
@@ -237,7 +248,7 @@
         <div class="col-sm-2 fixed">
             <img src="../img/content-bloom-logo-150x75.jpg" alt="www.contentbloom.com" />
             <hr />
-            <div id="clear-filters" class="row text-right clear-filter-link"><a href="#">Clear All Filters</a></div>
+            <!--<div id="clear-filters" class="row text-right clear-filter-link"><a href="#">Clear All Filters</a></div>-->
             <div id="publish-target-filters" class="filters">
                 <h2>Publishing Target</h2>
 
@@ -291,7 +302,7 @@
             <div class="row">
                 <div class="col-sm-3 top-left">
                     <div class="select">
-                        <select name="publications" id="publications" ng-model="Publications.itemId" ng-options="publication.id as publication.title for publication in Publications.PublicationList">
+                        <select name="publications" id="publications" ng-model="Publications.itemId" ng-options="publication.id as publication.title for publication in Publications.PublicationList"  ng-change="onChange()" ng-model="publications">
                         </select>
                     </div>
                     <div>
