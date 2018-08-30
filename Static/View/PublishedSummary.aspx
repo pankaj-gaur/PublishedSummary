@@ -11,50 +11,12 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-    
+
 
     <script>
-        $(document).ready(function () {
-            alert("JavaScript: "+this.window.dialogArguments);
-            $.ajax({
-                type: "POST",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
-                data: "{'IDs':[{ 'Id': 'tcm:14-877-64', 'Target': 'DXA Staging'},{ 'Id': 'tcm:14-1867-64', 'Target': 'DXA Staging'}]}",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            });
-
-        });
-        $(document).ready(function () {
-            $.ajax({
-                type: "POST",
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
-                data: "{'IDs':[{ 'Id': 'tcm:14-877-64', 'Target': 'DXA Staging'},{ 'Id': 'tcm:14-1867-64', 'Target': 'DXA Staging'}]}",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            });
-
-        });
+        
         alchemyApp = angular.module('alchemyApp', []);
-        alchemyApp.controller('alchemyController',['$scope', '$http', '$window', function ($scope, $http, $window) {
+        alchemyApp.controller('alchemyController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
 
             $scope.publicationTargets = [];
             $scope.pages = true;
@@ -79,12 +41,20 @@
 
             $scope.onChange = function () {
                 $http({
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
-                method: "POST",
-                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
-            }).success(function (response) {
-                $scope.PublishedItems = response;
-            });
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
+                    method: "POST",
+                    data: "{'IDs':['" + $scope.Publications.itemId + "']}"
+                }).success(function (response) {
+                    $scope.PublishedItems = response;
+                });
+
+                $http({
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
+                    method: "POST",
+                    data: "{'IDs':['" + $scope.Publications.itemId + "']}"
+                }).success(function (response) {
+                    $scope.PublishedSummaryPanelData = response;
+                });
             }
 
             $http({
@@ -184,27 +154,8 @@
                 downloadJSON2CSV(csvArray);
             });
 
-            $("#btn_publish_selected").click(function () {
-                var publishParams = getSelectedItems();
-                alert(JSON.stringify(publishParams));
-            });
 
-            $("#btn_unpublish_selected").click(function () {
-                var unpublishParams = getSelectedItems();
-                alert(JSON.stringify(unpublishParams));
-            });
 
-            function getSelectedItems() {
-                var dom = $$(".selected-row div");
-                var params = [];
-                for (var index = 0; index < dom.length; index = index + 7) {
-                    var temp = {};
-                    temp.id = dom[index].innerText;
-                    temp.target = dom[index + 3].innerText
-                    params.push(temp);
-                }
-                return params;
-            }
 
             function publish(tcmURI) {
                 alert(tcmURI);
@@ -235,6 +186,68 @@
                 }
             };
 
+        });
+
+        $(function () {
+
+            $("#btn_unpublish_selected").click(function () {
+                var unpublishParams = getSelectedItems();
+                var jsonParam = "{'IDs':" + JSON.stringify(unpublishParams) + "}";
+                console.log(jsonParam);
+                jQuery.ajax({
+                    type: "POST",
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
+                    data: jsonParam,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        alert("Send to publishing queue successfully!");
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+
+
+            $("#btn_publish_selected").click(function () {
+                var publishParams = getSelectedItems();
+                var jsonParam = "{'IDs':" + JSON.stringify(publishParams) + "}";
+                console.log(jsonParam);
+                jQuery.ajax({
+                    type: "POST",
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
+                    data: jsonParam,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        alert("Send to publishing queue successfully!");
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+
+            });
+
+            function getSelectedItems() {
+                var dom = $$(".selected-row div");
+                var params = [];
+                for (var index = 0; index < dom.length; index = index + 7) {
+                    var temp = {};
+                    temp.Id = dom[index].innerText;
+                    temp.Target = dom[index + 3].innerText
+                    params.push(temp);
+                }
+                return params;
+            }
         });
 
     </script>
@@ -302,7 +315,7 @@
             <div class="row">
                 <div class="col-sm-3 top-left">
                     <div class="select">
-                        <select name="publications" id="publications" ng-model="Publications.itemId" ng-options="publication.id as publication.title for publication in Publications.PublicationList"  ng-change="onChange()" ng-model="publications">
+                        <select name="publications" id="publications" ng-model="Publications.itemId" ng-options="publication.id as publication.title for publication in Publications.PublicationList" ng-change="onChange()">
                         </select>
                     </div>
                     <div>
