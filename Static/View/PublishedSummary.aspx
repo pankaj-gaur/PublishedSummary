@@ -175,20 +175,26 @@
             });
 
             $("#btn_publish_selected").click(function () {
-                alert("test");
-                var dom2 = $$(".selected-row div");
-                for (var index = 0; index < dom2.length; index = index + 7) {
-                    alert(dom2[index].innerText);
-                }
+                var publishParams = getSelectedItems();
+                alert(JSON.stringify(publishParams));
             });
 
             $("#btn_unpublish_selected").click(function () {
-                var dom2 = $$(".selected-row div");
-                for (var index = 0; index < dom2.length; index = index + 7) {
-                    alert(dom2[index].innerText);
-                }
-
+                var unpublishParams = getSelectedItems();
+                alert(JSON.stringify(unpublishParams));
             });
+
+            function getSelectedItems() {
+                var dom = $$(".selected-row div");
+                var params = [];
+                for (var index = 0; index < dom.length; index = index + 7) {
+                    var temp = {};
+                    temp.id = dom[index].innerText;
+                    temp.target = dom[index + 3].innerText
+                    params.push(temp);
+                }
+                return params;
+            }
 
             function publish(tcmURI) {
                 alert(tcmURI);
@@ -342,7 +348,7 @@
                         </div>
                         <div class="col-xs-1">Action</div>
                     </div>
-                    <div id="test" class="row-eq-height" toggle-class ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data) | orderBy:orderByField:reverseSort">
+                    <div class="row-eq-height" toggle-class ng-repeat="data in PublishedItems | filter:SearchText | filter:filteredPublishedItems(data) | orderBy:orderByField:reverseSort">
 
                         <div class="col-xs-2">{{data.id}}</div>
                         <div class="col-xs-2">{{data.title}}</div>
