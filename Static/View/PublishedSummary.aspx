@@ -172,9 +172,7 @@
                 if ($scope.PublicationTarget == null || $scope.PublishedItems == null || $scope.PublishedSummaryPanelData == null) {
                      $scope.executeQuery();
                 }
-
             }
-
             $scope.refresh();
         }]);
 
