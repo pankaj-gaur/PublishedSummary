@@ -452,7 +452,7 @@
                     <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
                 </div>
                 <!-- CTA -->
-               <div class="col-sm-12 copyright">© Content Bloom, 2018 | v1.0.0.0 </div>
+               <div class="col-sm-12 copyright">&copy; Content Bloom, 2018 | v1.0.0.0 </div>
 
             </div>
             <!-- Right Side Panel -->
