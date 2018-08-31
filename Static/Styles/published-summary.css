@@ -2,8 +2,8 @@
 	font-size:12px;
 	font-weight:bold;
 	margin-top: 10px;
-	margin-bottom: 5px;
-    padding-top: 15px;
+	margin-bottom: 15px;
+    padding-top: 5px;
 }
 
 
@@ -110,7 +110,7 @@
     }
 
 #pub-summary .filters {
-    /*float:left;*/
+    margin-bottom: 40px;
 }
 
 #pub-summary .filters label {
@@ -205,7 +205,7 @@
 #pub-summary .row-header {
     height: 30px;
     padding-top:6px;
-
+    cursor:pointer;
     background-color: #867d79;
     font-weight: bold;
     color: #fff;
@@ -263,4 +263,13 @@
 
 #pub-summary .selected-row {
 	background-color:#d0d0d0;
+}
+
+#pub-summary .sort-icon {
+    font-size:14px;
+}
+
+#pub-summary .copyright {
+    margin-top: 1px;
+    text-align: center;
 }

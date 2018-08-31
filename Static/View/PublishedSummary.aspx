@@ -207,6 +207,16 @@
             });
 
 
+            $("#btn_delta").click(function () {
+                alert("This feature will be released in version 2.0");
+            });
+
+            $("#btn_sync").click(function () {
+                alert("This feature will be released in version 2.0");
+            });
+
+
+
             function downloadJSON2CSV(objArray) {
                 //var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
                 var array = objArray;
@@ -394,22 +404,22 @@
                 <div class="summary-grid">
                     <div class="row-eq-height row-header align-middle">
                         <div class="col-xs-2" ng-click="orderByField='id'; reverseSort = !reverseSort">
-                            ID <span ng-show="orderByField == 'id'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                            ID <span ng-show="orderByField == 'id'"><span ng-show="!reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet"></span></span><span ng-show="reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet-alt"></span></span></span>
                         </div>
                         <div class="col-xs-2" ng-click="orderByField='title'; reverseSort = !reverseSort">
-                            Title <span ng-show="orderByField == 'title'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                            Title <span ng-show="orderByField == 'title'"><span ng-show="!reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet"></span></span><span ng-show="reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet-alt"></span></span></span>
                         </div>
                         <div class="col-xs-2" ng-click="orderByField='type'; reverseSort = !reverseSort">
-                            Type <span ng-show="orderByField == 'type'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                            Type <span ng-show="orderByField == 'type'"><span ng-show="!reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet"></span></span><span ng-show="reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet-alt"></span></span></span>
                         </div>
                         <div class="col-xs-1" ng-click="orderByField='publicationTarget'; reverseSort = !reverseSort">
-                            Target <span ng-show="orderByField == 'publicationTarget'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                            Target <span ng-show="orderByField == 'publicationTarget'"><span ng-show="!reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet"></span></span><span ng-show="reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet-alt"></span></span></span>
                         </div>
                         <div class="col-xs-2" ng-click="orderByField='user'; reverseSort = !reverseSort">
-                            By <span ng-show="orderByField == 'user'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                            By <span ng-show="orderByField == 'user'"><span ng-show="!reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet"></span></span><span ng-show="reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet-alt"></span></span></span>
                         </div>
                         <div class="col-xs-2" ng-click="orderByField='publishedAt'; reverseSort = !reverseSort">
-                            Date <span ng-show="orderByField == 'publishedAt'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+                            Date <span ng-show="orderByField == 'publishedAt'"><span ng-show="!reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet"></span></span><span ng-show="reverseSort"><span class="sort-icon glyphicon glyphicon-sort-by-alphabet-alt"></span></span></span>
                         </div>
                         <div class="col-xs-1">Action</div>
                     </div>
@@ -435,13 +445,14 @@
                 <!-- Summary Grid -->
 
                 <div class="col-sm-12 actions padding-left-5">
-                    <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
+                    <button id="btn_delta" class="col-sm-2 button">Show Delta</button>
+                    <button id="btn_sync" class="col-sm-3 button">Sync Publishing with Live</button>
                     <button id="btn_publish_selected" class="col-sm-2 button">Publish Selected</button>
                     <button id="btn_unpublish_selected" class="col-sm-2 button">Unpublish Selected</button>
-                    <button class="col-sm-3 button">Sync Publishing with Live</button>
-                    <button class="col-sm-2 button">Show Delta</button>
+                    <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
                 </div>
                 <!-- CTA -->
+               <div class="col-sm-12 copyright">© Content Bloom, 2018 | v1.0.0.0 </div>
 
             </div>
             <!-- Right Side Panel -->
