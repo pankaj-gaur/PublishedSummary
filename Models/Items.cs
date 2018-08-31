@@ -178,10 +178,15 @@ namespace PublishedSummary.Models
 
          
     }
+
+    public class TcmIds
+    {
+        public List<string> IDs { get; set; }
+    }
     /// <summary>
     /// Class data.
     /// </summary>
-    public class data  
+    public class PublishUnPublishInfoData
     {
 
         /// <summary>
