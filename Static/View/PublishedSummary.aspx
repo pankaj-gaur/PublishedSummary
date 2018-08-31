@@ -12,7 +12,6 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
 
-
     <script>
         var queries = {};
         jQuery.each(document.location.search.substr(1).split('&'), function (c, q) {
@@ -50,29 +49,31 @@
                 $scope.Publications.itemId = $scope.Publications.selectionId.ToString();
             }
 
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
-                $scope.PublicationTarget = response;
-            });
+            $scope.executeQuery = function () {
 
-            $http({
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
-                method: "POST",
-                data: "{'IDs':['" + $scope.Publications.selectionId + "']}"
-            }).success(function (response) {
-                $scope.PublishedItems = response;
-            });
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
-                $scope.Publications.PublicationList = response;
-            });
+                $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
+                    $scope.PublicationTarget = response;
+                });
 
-            $http({
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
-                method: "POST",
-                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
-            }).success(function (response) {
-                $scope.PublishedSummaryPanelData = response;
-            });
+                $http({
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
+                    method: "POST",
+                    data: "{'IDs':['" + $scope.Publications.selectionId + "']}"
+                }).success(function (response) {
+                    $scope.PublishedItems = response;
+                });
+                $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
+                    $scope.Publications.PublicationList = response;
+                });
 
+                $http({
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
+                    method: "POST",
+                    data: "{'IDs':['" + $scope.Publications.itemId + "']}"
+                }).success(function (response) {
+                    $scope.PublishedSummaryPanelData = response;
+                });
+            }
 
             $scope.publish = function (itemID, target) {
 
@@ -165,6 +166,16 @@
                 }
             };
 
+            $scope.executeQuery();
+
+            $scope.refresh = function () {
+                if ($scope.PublicationTarget == null || $scope.PublishedItems == null || $scope.PublishedSummaryPanelData == null) {
+                     $scope.executeQuery();
+                }
+
+            }
+
+            $scope.refresh();
         }]);
 
         alchemyApp.directive("toggleClass", function () {
