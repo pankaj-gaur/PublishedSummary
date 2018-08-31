@@ -1,5 +1,5 @@
 <%@ Page Inherits="Tridion.Web.UI.Controls.TridionPage" %>
-
+ 
 <html ng-app="alchemyApp">
 <head runat="server">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -14,6 +14,11 @@
 
 
     <script>
+        var queries = {};
+        jQuery.each(document.location.search.substr(1).split('&'), function (c, q) {
+            var i = q.split('=');
+            queries[i[0].toString()] = i[1].toString();
+        });
         
         alchemyApp = angular.module('alchemyApp', []);
         alchemyApp.controller('alchemyController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
@@ -32,7 +37,9 @@
 
 
             $scope.Publications = {};
-            $scope.Publications.itemId = "tcm:0-14-1";//$window.alert("AngularJS: "+$window.dialogArguments);
+            $scope.Publications.selectionId = decodeURIComponent(queries.tcm.replace(/\+/g, '%20'));
+            $scope.Publications.itemId = //decodeURIComponent(queries.tcm.replace(/\+/g, '%20'));//$window.alert("AngularJS: "+$window.dialogArguments);
+            
 
 
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
