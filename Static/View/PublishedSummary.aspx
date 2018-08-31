@@ -1,5 +1,5 @@
 <%@ Page Inherits="Tridion.Web.UI.Controls.TridionPage" %>
- 
+
 <html ng-app="alchemyApp">
 <head runat="server">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -19,7 +19,7 @@
             var i = q.split('=');
             queries[i[0].toString()] = i[1].toString();
         });
-        
+
         alchemyApp = angular.module('alchemyApp', []);
         alchemyApp.controller('alchemyController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
 
@@ -38,12 +38,39 @@
 
             $scope.Publications = {};
             $scope.Publications.selectionId = decodeURIComponent(queries.tcm.replace(/\+/g, '%20'));
-            $scope.Publications.itemId = //decodeURIComponent(queries.tcm.replace(/\+/g, '%20'));//$window.alert("AngularJS: "+$window.dialogArguments);
-            
+            $scope.Publications.itemId = "";
 
+            var itemID = "";
+            var str = [];
+            str = $scope.Publications.selectionId.split('-');
+            if (str[2] != "1") {
+                $scope.Publications.itemId = "tcm:0-" + str[0].substring(str[0].length - 2) + "-1";
+            }
+            else {
+                $scope.Publications.itemId = $scope.Publications.selectionId.ToString();
+            }
 
             $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationTarget").success(function (response) {
                 $scope.PublicationTarget = response;
+            });
+
+            $http({
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
+                method: "POST",
+                data: "{'IDs':['" + $scope.Publications.selectionId + "']}"
+            }).success(function (response) {
+                $scope.PublishedItems = response;
+            });
+            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
+                $scope.Publications.PublicationList = response;
+            });
+
+            $http({
+                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
+                method: "POST",
+                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
+            }).success(function (response) {
+                $scope.PublishedSummaryPanelData = response;
             });
 
 
@@ -60,7 +87,7 @@
                 }).success(function (response) {
                     alert("Send to publishing queue successfully!");
                 });
-                
+
             }
 
             $scope.unpublish = function (itemID, target) {
@@ -96,24 +123,6 @@
                 });
             }
 
-            $http({
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
-                method: "POST",
-                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
-            }).success(function (response) {
-                $scope.PublishedItems = response;
-            });
-            $http.get(document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetPublicationList").success(function (response) {
-                $scope.Publications.PublicationList = response;
-            });
-
-            $http({
-                url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetSummaryPanelData",
-                method: "POST",
-                data: "{'IDs':['" + $scope.Publications.itemId + "']}"
-            }).success(function (response) {
-                $scope.PublishedSummaryPanelData = response;
-            });
 
             $scope.filteredPublishedItems = function (items) {
                 return function (item) {
