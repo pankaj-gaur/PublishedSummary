@@ -29,6 +29,7 @@ Alchemy.command("${PluginName}", "PublishedSummary", {
     isAvailable: function (selection) {
         console.log("isAvailable Method");
         console.log("Selection Count: " + selection.getCount());
+       // alert(selection.getCount());
         if (selection.getCount() == 1) {
             var itemType = $models.getItemType(selection.getItem(0))
 
@@ -39,6 +40,7 @@ Alchemy.command("${PluginName}", "PublishedSummary", {
                 itemType == $const.ItemType.STRUCTURE_GROUP ||
                 itemType == $const.ItemType.PUBLICATION ||
                 itemType == $const.ItemType.CATMAN) {
+                //alert(itemType);
                 return true;
             }
             
