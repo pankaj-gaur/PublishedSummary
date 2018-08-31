@@ -46,6 +46,38 @@
                 $scope.PublicationTarget = response;
             });
 
+
+            $scope.publish = function (itemID, target) {
+
+                var temp = {};
+                temp.Id = itemID;
+                temp.Target = target;
+
+                $http({
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
+                    method: "POST",
+                    data: "{'IDs':[" + JSON.stringify(temp) + "]}"
+                }).success(function (response) {
+                    alert("Send to publishing queue successfully!");
+                });
+                
+            }
+
+            $scope.unpublish = function (itemID, target) {
+
+                var temp = {};
+                temp.Id = itemID;
+                temp.Target = target;
+
+                $http({
+                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
+                    method: "POST",
+                    data: "{'IDs':[" + JSON.stringify(temp) + "]}"
+                }).success(function (response) {
+                    alert("Send to publishing queue successfully!");
+                });
+            }
+
             $scope.onChange = function () {
                 $http({
                     url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/GetAllPublishedItems",
@@ -124,11 +156,6 @@
                 }
             };
 
-            var publish = function (item) {
-                alert(item);
-                return true;
-            }
-
         }]);
 
         alchemyApp.directive("toggleClass", function () {
@@ -161,16 +188,6 @@
                 downloadJSON2CSV(csvArray);
             });
 
-
-
-
-            function publish(tcmURI) {
-                alert(tcmURI);
-            }
-
-            function unpublish(tcmURI) {
-                alert(tcmURI);
-            }
 
             function downloadJSON2CSV(objArray) {
                 //var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
@@ -387,9 +404,9 @@
                         <div class="col-xs-2">{{data.user}}</div>
                         <div class="col-xs-2">{{data.publishedAt | date:"dd MMM yyyy"}}</div>
                         <div class="col-xs-1">
-                            <a href="#" data-toggle="tooltip" title="Publish Item!">
+                            <a href="javascript:void(0);" ng-click="publish(data.id, data.publicationTarget)" data-toggle="tooltip" title="Publish Item!">
                                 <img class="action-icon publish-icon" src="#" /></a>
-                            <a href="unpublish({{data.id}});" data-toggle="tooltip" title="Unpublish Item!">
+                            <a href="javascript:void(0);" ng-click="unpublish(data.id, data.publicationTarget)" data-toggle="tooltip" title="Unpublish Item!">
                                 <img class="action-icon unpublish-icon" src="#" /></a>
                             <a href="{{data.openItem}}" data-toggle="tooltip" title="Open Item!" target="_blank">
                                 <img class="action-icon open-icon" src="#" /></a>
@@ -412,6 +429,5 @@
             <!-- Right Side Panel -->
         </div>
     </div>
-    <!--<script type="text/javascript">var removeSdlWebLoadInterval = setInterval(function () { if (!window.$display) { return; } clearInterval(removeSdlWebLoadInterval); if ($display && !$display.getView()) { if (window._activityIndicatorControl) { window._activityIndicatorControl.dispose(); window._activityIndicatorControl = null; } var sdlWebLoadingIndicator = $('style#loadingIndicator'); if (sdlWebLoadingIndicator) { $dom.removeNode(sdlWebLoadingIndicator); } } }, 500);</script>-->
 </body>
 </html>
