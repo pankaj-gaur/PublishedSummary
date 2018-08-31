@@ -46,7 +46,7 @@
                 $scope.Publications.itemId = "tcm:0-" + str[0].substring(str[0].length - 2) + "-1";
             }
             else {
-                $scope.Publications.itemId = $scope.Publications.selectionId.ToString();
+                $scope.Publications.itemId = $scope.Publications.selectionId;
             }
 
             $scope.executeQuery = function () {
