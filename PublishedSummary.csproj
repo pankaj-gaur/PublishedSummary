@@ -110,11 +110,9 @@
     <Content Include="Static\Images\calendar.png" />
     <Content Include="Static\Images\content-bloom-logo-150x75.jpg" />
     <Content Include="Static\Images\content-bloom-logo-75x75.jpg" />
-    <Content Include="Static\Images\open.png" />
-    <Content Include="Static\Images\publish.png" />
+    <Content Include="Static\Images\loading.gif" />
     <Content Include="Static\Images\published-summary-icon-16x16.png" />
     <Content Include="Static\Images\published-summary-icon-32x32.png" />
-    <Content Include="Static\Images\unpublish.png" />
     <Content Include="Static\Scripts\PublishedSummary.js" />
     <Content Include="Static\Styles\custom-control.css" />
     <Content Include="Static\Styles\published-summary.css" />

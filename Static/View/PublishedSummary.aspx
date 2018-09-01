@@ -78,6 +78,7 @@
             $scope.publish = function (itemID, target) {
                 var confirmResult = confirm("Confirmation!\n The item with TCM URI - " + itemID + " will be published to " + target + " Publishing Target.\n Press OK to confirm.");
                 if (confirmResult) {
+                    jQuery("#progressDiv").show();
                     var temp = {};
                     temp.Id = itemID;
                     temp.Target = target;
@@ -87,6 +88,7 @@
                         method: "POST",
                         data: "{'IDs':[" + JSON.stringify(temp) + "]}"
                     }).success(function (response) {
+                        jQuery("#progressDiv").hide();
                         alert("Send to publishing queue successfully!");
                     });
                 }
@@ -96,6 +98,7 @@
             $scope.unpublish = function (itemID, target) {
                 var confirmResult = confirm("Confirmation!\n The item with TCM URI - " + itemID + " will be unpublished from " + target + " Publishing Target.\n Press OK to confirm.");
                 if (confirmResult) {
+                    jQuery("#progressDiv").show();
                     var temp = {};
                     temp.Id = itemID;
                     temp.Target = target;
@@ -105,6 +108,7 @@
                         method: "POST",
                         data: "{'IDs':[" + JSON.stringify(temp) + "]}"
                     }).success(function (response) {
+                        jQuery("#progressDiv").hide();
                         alert("Send to publishing queue successfully!");
                     });
                 }
@@ -250,6 +254,7 @@
                 var unpublishParams = getSelectedItems();
                 var confirmResult = confirm("Confirmation!\n" + unpublishParams.length + " items will be sent to the publishing queue for unpublishing.\n Press OK to confirm.");
                 if (confirmResult) {
+                    jQuery("#progressDiv").show();
                     var jsonParam = "{'IDs':" + JSON.stringify(unpublishParams) + "}";
                     console.log(jsonParam);
                     jQuery.ajax({
@@ -259,12 +264,15 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (response) {
+                            jQuery("#progressDiv").hide();
                             alert("Send to publishing queue successfully for unpublishing!");
                         },
                         failure: function (response) {
+                            jQuery("#progressDiv").hide();
                             alert(response.responseText);
                         },
                         error: function (response) {
+                            jQuery("#progressDiv").hide();
                             alert(response.responseText);
                         }
                     });
@@ -276,6 +284,7 @@
 
                 var confirmResult = confirm("Confirmation!\n" + publishParams.length + " items will be sent to the publishing queue for publishing.\n Press OK to confirm.");
                 if (confirmResult) {
+                    jQuery("#progressDiv").show();
                     var jsonParam = "{'IDs':" + JSON.stringify(publishParams) + "}";
                     console.log(jsonParam);
                     jQuery.ajax({
@@ -285,12 +294,15 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (response) {
+                            jQuery("#progressDiv").hide();
                             alert("Send to publishing queue successfully for publishing!");
                         },
                         failure: function (response) {
+                            jQuery("#progressDiv").hide();
                             alert(response.responseText);
                         },
                         error: function (response) {
+                            jQuery("#progressDiv").hide();
                             alert(response.responseText);
                         }
                     });
@@ -408,7 +420,8 @@
                     </div>
                 </div>
                 <!-- Horizontal Row - Right Pane - Top -->
-
+                <div id="progressDiv" class="progress-modal"></div>
+                    
                 <div class="summary-grid">
                     <div class="row-eq-height row-header align-middle">
                         <div class="col-xs-2" ng-click="orderByField='id'; reverseSort = !reverseSort">
