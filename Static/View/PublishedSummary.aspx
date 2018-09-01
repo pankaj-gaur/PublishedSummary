@@ -76,34 +76,38 @@
             }
 
             $scope.publish = function (itemID, target) {
+                var confirmResult = confirm("Confirmation!\n The item with TCM URI - " + itemID + " will be published to " + target + " Publishing Target.\n Press OK to confirm.");
+                if (confirmResult) {
+                    var temp = {};
+                    temp.Id = itemID;
+                    temp.Target = target;
 
-                var temp = {};
-                temp.Id = itemID;
-                temp.Target = target;
-
-                $http({
-                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
-                    method: "POST",
-                    data: "{'IDs':[" + JSON.stringify(temp) + "]}"
-                }).success(function (response) {
-                    alert("Send to publishing queue successfully!");
-                });
+                    $http({
+                        url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
+                        method: "POST",
+                        data: "{'IDs':[" + JSON.stringify(temp) + "]}"
+                    }).success(function (response) {
+                        alert("Send to publishing queue successfully!");
+                    });
+                }
 
             }
 
             $scope.unpublish = function (itemID, target) {
+                var confirmResult = confirm("Confirmation!\n The item with TCM URI - " + itemID + " will be unpublished from " + target + " Publishing Target.\n Press OK to confirm.");
+                if (confirmResult) {
+                    var temp = {};
+                    temp.Id = itemID;
+                    temp.Target = target;
 
-                var temp = {};
-                temp.Id = itemID;
-                temp.Target = target;
-
-                $http({
-                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
-                    method: "POST",
-                    data: "{'IDs':[" + JSON.stringify(temp) + "]}"
-                }).success(function (response) {
-                    alert("Send to publishing queue successfully!");
-                });
+                    $http({
+                        url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
+                        method: "POST",
+                        data: "{'IDs':[" + JSON.stringify(temp) + "]}"
+                    }).success(function (response) {
+                        alert("Send to publishing queue successfully!");
+                    });
+                }
             }
 
             $scope.onChange = function () {
@@ -170,7 +174,7 @@
 
             $scope.refresh = function () {
                 if ($scope.PublicationTarget == null || $scope.PublishedItems == null || $scope.PublishedSummaryPanelData == null) {
-                     $scope.executeQuery();
+                    $scope.executeQuery();
                 }
             }
             $scope.refresh();
@@ -244,49 +248,53 @@
 
             $("#btn_unpublish_selected").click(function () {
                 var unpublishParams = getSelectedItems();
-                var jsonParam = "{'IDs':" + JSON.stringify(unpublishParams) + "}";
-                console.log(jsonParam);
-                jQuery.ajax({
-                    type: "POST",
-                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
-                    data: jsonParam,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (response) {
-                        alert("Send to publishing queue successfully!");
-                    },
-                    failure: function (response) {
-                        alert(response.responseText);
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    }
-                });
+                var confirmResult = confirm("Confirmation!\n" + unpublishParams.length + " items will be sent to the publishing queue for unpublishing.\n Press OK to confirm.");
+                if (confirmResult) {
+                    var jsonParam = "{'IDs':" + JSON.stringify(unpublishParams) + "}";
+                    console.log(jsonParam);
+                    jQuery.ajax({
+                        type: "POST",
+                        url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/UnPublishItems",
+                        data: jsonParam,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            alert("Send to publishing queue successfully for unpublishing!");
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
             });
-
-
 
             $("#btn_publish_selected").click(function () {
                 var publishParams = getSelectedItems();
-                var jsonParam = "{'IDs':" + JSON.stringify(publishParams) + "}";
-                console.log(jsonParam);
-                jQuery.ajax({
-                    type: "POST",
-                    url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
-                    data: jsonParam,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (response) {
-                        alert("Send to publishing queue successfully!");
-                    },
-                    failure: function (response) {
-                        alert(response.responseText);
-                    },
-                    error: function (response) {
-                        alert(response.responseText);
-                    }
-                });
 
+                var confirmResult = confirm("Confirmation!\n" + publishParams.length + " items will be sent to the publishing queue for publishing.\n Press OK to confirm.");
+                if (confirmResult) {
+                    var jsonParam = "{'IDs':" + JSON.stringify(publishParams) + "}";
+                    console.log(jsonParam);
+                    jQuery.ajax({
+                        type: "POST",
+                        url: document.location.origin + "/Alchemy/Plugins/Published_Summary/api/Service/PublishItems",
+                        data: jsonParam,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            alert("Send to publishing queue successfully for publishing!");
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
             });
 
             function getSelectedItems() {
@@ -452,7 +460,7 @@
                     <button id="btn_export" class="col-sm-2 button">Export in CSV</button>
                 </div>
                 <!-- CTA -->
-               <div class="col-sm-12 copyright">&copy; Content Bloom, 2018 | v1.0.0.0 </div>
+                <div class="col-sm-12 copyright">&copy; Content Bloom, 2018 | v1.0.0.0 </div>
 
             </div>
             <!-- Right Side Panel -->
